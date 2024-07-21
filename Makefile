@@ -122,6 +122,7 @@ DEB_ARCH              := iphoneos-arm
 GNU_HOST_TRIPLE       := aarch64-apple-darwin
 PLATFORM_VERSION_MIN  := -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET)
 RUST_TARGET           := aarch64-apple-ios
+GOLANG_OS             := ios
 LLVM_TARGET           := arm64-apple-ios$(IPHONEOS_DEPLOYMENT_TARGET)
 MEMO_PREFIX           ?=
 MEMO_SUB_PREFIX       ?= /usr
@@ -139,6 +140,7 @@ DEB_ARCH              := iphoneos-arm64
 GNU_HOST_TRIPLE       := aarch64-apple-darwin
 PLATFORM_VERSION_MIN  := -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET)
 RUST_TARGET           := aarch64-apple-ios
+GOLANG_OS             := ios
 LLVM_TARGET           := arm64-apple-ios$(IPHONEOS_DEPLOYMENT_TARGET)
 MEMO_PREFIX           ?= /var/jb
 MEMO_SUB_PREFIX       ?= /usr
@@ -156,6 +158,7 @@ DEB_ARCH              := iphoneos-arm64e
 GNU_HOST_TRIPLE       := aarch64-apple-darwin
 PLATFORM_VERSION_MIN  := -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET)
 RUST_TARGET           := aarch64-apple-ios
+GOLANG_OS             := ios
 LLVM_TARGET           := arm64e-apple-ios$(IPHONEOS_DEPLOYMENT_TARGET)
 MEMO_PREFIX           ?= /var/jb
 MEMO_SUB_PREFIX       ?= /usr
@@ -173,6 +176,7 @@ DEB_ARCH              := iphoneos-arm64e
 GNU_HOST_TRIPLE       := aarch64-apple-darwin
 PLATFORM_VERSION_MIN  := -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET)
 RUST_TARGET           := aarch64-apple-ios
+GOLANG_OS             := ios
 LLVM_TARGET           := arm64e-apple-ios$(IPHONEOS_DEPLOYMENT_TARGET)
 MEMO_PREFIX           ?=
 MEMO_SUB_PREFIX       ?= /usr
@@ -190,6 +194,7 @@ DEB_ARCH              := iphoneos-arm
 GNU_HOST_TRIPLE       := armv7-apple-darwin
 PLATFORM_VERSION_MIN  := -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET)
 RUST_TARGET           := armv7-apple-ios
+GOLANG_OS             := ios
 LLVM_TARGET           := armv7-apple-ios$(IPHONEOS_DEPLOYMENT_TARGET)
 MEMO_PREFIX           ?=
 MEMO_SUB_PREFIX       ?= /usr
@@ -207,6 +212,7 @@ DEB_ARCH              := appletvos-arm64
 GNU_HOST_TRIPLE       := aarch64-apple-darwin
 PLATFORM_VERSION_MIN  := -mappletvos-version-min=$(APPLETVOS_DEPLOYMENT_TARGET)
 RUST_TARGET           := aarch64-apple-tvos
+GOLANG_OS             := ios
 LLVM_TARGET           := arm64-apple-tvos$(APPLETVOS_DEPLOYMENT_TARGET)
 MEMO_PREFIX           ?=
 MEMO_SUB_PREFIX       ?= /usr
@@ -224,6 +230,7 @@ DEB_ARCH              := appletvos-arm64e
 GNU_HOST_TRIPLE       := aarch64-apple-darwin
 PLATFORM_VERSION_MIN  := -mappletvos-version-min=$(APPLETVOS_DEPLOYMENT_TARGET)
 RUST_TARGET           := aarch64-apple-tvos
+GOLANG_OS             := ios
 LLVM_TARGET           := arm64e-apple-tvos$(APPLETVOS_DEPLOYMENT_TARGET)
 MEMO_PREFIX           ?=
 MEMO_SUB_PREFIX       ?= /usr
@@ -241,6 +248,7 @@ DEB_ARCH              := bridgeos-arm64
 GNU_HOST_TRIPLE       := aarch64-apple-darwin
 PLATFORM_VERSION_MIN  := --target=arm64-apple-bridgeos$(BRIDGEOS_DEPLOYMENT_TARGET)
 RUST_TARGET           := aarch64-apple-bridgeos
+GOLANG_OS             := ios
 LLVM_TARGET           := arm64-apple-bridgeos$(BRIDGEOS_DEPLOYMENT_TARGET)
 MEMO_PREFIX           ?=
 MEMO_SUB_PREFIX       ?= /usr
@@ -257,7 +265,8 @@ PLATFORM              := watchos
 DEB_ARCH              := watchos-arm64-32
 GNU_HOST_TRIPLE       := aarch64-apple-darwin
 PLATFORM_VERSION_MIN  := -mwatchos-version-min=$(WATCHOS_DEPLOYMENT_TARGET)
-RUST_TARGET           := aarch64-apple-watchos
+RUST_TARGET           := arm64_32-apple-watchos
+GOLANG_OS             := ios
 LLVM_TARGET           := arm64_32-apple-watchos$(WATCHOS_DEPLOYMENT_TARGET)
 MEMO_PREFIX           ?=
 MEMO_SUB_PREFIX       ?= /usr
@@ -291,6 +300,7 @@ PLATFORM              := macosx
 DEB_ARCH              := darwin-arm64e
 GNU_HOST_TRIPLE       := aarch64-apple-darwin
 RUST_TARGET           := $(GNU_HOST_TRIPLE)
+GOLANG_OS             := darwin
 LLVM_TARGET           := arm64e-apple-macos$(MACOSX_DEPLOYMENT_TARGET)
 PLATFORM_VERSION_MIN  := -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
 MEMO_PREFIX           ?= /opt/procursus
@@ -308,6 +318,7 @@ PLATFORM              := macosx
 DEB_ARCH              := darwin-arm64
 GNU_HOST_TRIPLE       := aarch64-apple-darwin
 RUST_TARGET           := $(GNU_HOST_TRIPLE)
+GOLANG_OS             := darwin
 LLVM_TARGET           := arm64-apple-macos$(MACOSX_DEPLOYMENT_TARGET)
 PLATFORM_VERSION_MIN  := -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
 MEMO_PREFIX           ?= /opt/procursus
@@ -325,6 +336,7 @@ PLATFORM              := macosx
 DEB_ARCH              := darwin-amd64
 GNU_HOST_TRIPLE       := x86_64-apple-darwin
 RUST_TARGET           := $(GNU_HOST_TRIPLE)
+GOLANG_OS             := darwin
 LLVM_TARGET           := x86_64-apple-macos$(MACOSX_DEPLOYMENT_TARGET)
 PLATFORM_VERSION_MIN  := -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
 MEMO_PREFIX           ?= /opt/procursus
@@ -664,7 +676,7 @@ DEFAULT_PERL_BUILD_FLAGS := \
 	install_path=html=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/share/doc/perl5
 
 DEFAULT_GOLANG_FLAGS := \
-	GOOS=$(shell echo $(RUST_TARGET) | cut -f3 -d-) \
+	GOOS=$(GOLANG_OS) \
 	GOARCH=$(shell echo $(MEMO_TARGET) | cut -f2 -d-) \
 	CGO_CFLAGS="$(shell echo $(CFLAGS) | sed 's|$(OPTIMIZATION_FLAGS)||')" \
 	CGO_CXXFLAGS="$(shell echo $(CXXFLAGS) | sed 's|$(OPTIMIZATION_FLAGS)||')" \
@@ -1503,6 +1515,7 @@ endif
 	@sed -E s/'__IOS_PROHIBITED|__TVOS_PROHIBITED|__WATCHOS_PROHIBITED'//g < $(TARGET_SYSROOT)/usr/include/time.h > $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/time.h
 	@sed -E s/'__IOS_PROHIBITED|__TVOS_PROHIBITED|__WATCHOS_PROHIBITED'//g < $(TARGET_SYSROOT)/usr/include/unistd.h > $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/unistd.h
 	@sed -E s/'__IOS_PROHIBITED|__TVOS_PROHIBITED|__WATCHOS_PROHIBITED'//g < $(TARGET_SYSROOT)/usr/include/mach/task.h > $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/mach/task.h
+	@sed -E s/'__IOS_PROHIBITED|__TVOS_PROHIBITED|__WATCHOS_PROHIBITED'//g < $(TARGET_SYSROOT)/usr/include/spawn.h > $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/spawn.h
 	@sed -E s/'__IOS_PROHIBITED|__TVOS_PROHIBITED|__WATCHOS_PROHIBITED'//g < $(TARGET_SYSROOT)/usr/include/mach/mach_host.h > $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/mach/mach_host.h
 	@sed -E s/'__IOS_PROHIBITED|__TVOS_PROHIBITED|__WATCHOS_PROHIBITED'//g < $(TARGET_SYSROOT)/usr/include/mach/thread_act.h > $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/mach/thread_act.h
 	@sed -E s/'__IOS_PROHIBITED|__TVOS_PROHIBITED|__WATCHOS_PROHIBITED'//g < $(TARGET_SYSROOT)/usr/include/mach/message.h > $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/mach/message.h
@@ -1511,6 +1524,7 @@ endif
 	@if [ -f $(TARGET_SYSROOT)/usr/include/_stdlib.h ]; then sed -E s/'__IOS_PROHIBITED|__TVOS_PROHIBITED|__WATCHOS_PROHIBITED'//g < $(TARGET_SYSROOT)/usr/include/_stdlib.h > $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/_stdlib.h; fi
 	@if [ -f $(TARGET_SYSROOT)/usr/include/_time.h ]; then sed -E s/'__IOS_PROHIBITED|__TVOS_PROHIBITED|__WATCHOS_PROHIBITED'//g < $(TARGET_SYSROOT)/usr/include/_time.h > $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/_time.h; fi
 	@sed -E /'__API_UNAVAILABLE'/d < $(TARGET_SYSROOT)/usr/include/pthread.h > $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/pthread.h
+	@sed -i 's/__API_UNAVAILABLE(.*)//g' $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/spawn.h
 	@sed -i -E s/'__API_UNAVAILABLE\(.*\)'// $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/IOKit/IOKitLib.h
 	@sed -E -e '\|/var/tmp|! s|"/var|"$(MEMO_PREFIX)/var|g' -e '\|/bin:|! s|/usr|$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)|g' -e '\|/bin:|! s|"/bin|"$(MEMO_PREFIX)/bin|g' -e '\|/bin:|! s|"/sbin|"$(MEMO_PREFIX)/sbin|g' -e 's|/etc|$(MEMO_PREFIX)/etc|g' -e 's|/usr/bin:|$(MEMO_PREFIX)/bin:$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin:/usr/bin:|g' -e 's|/usr/sbin:|$(MEMO_PREFIX)/sbin:$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin:/usr/sbin:|g' < $(TARGET_SYSROOT)/usr/include/pwd.h > $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/pwd.h
 	@sed -E -e '\|/var/tmp|! s|"/var|"$(MEMO_PREFIX)/var|g' -e '\|/bin:|! s|/usr|$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)|g' -e '\|/bin:|! s|"/bin|"$(MEMO_PREFIX)/bin|g' -e '\|/bin:|! s|"/sbin|"$(MEMO_PREFIX)/sbin|g' -e 's|/etc|$(MEMO_PREFIX)/etc|g' -e 's|/usr/bin:|$(MEMO_PREFIX)/bin:$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin:/usr/bin:|g' -e 's|/usr/sbin:|$(MEMO_PREFIX)/sbin:$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin:/usr/sbin:|g' < $(TARGET_SYSROOT)/usr/include/grp.h > $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/grp.h
