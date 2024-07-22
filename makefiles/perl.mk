@@ -3,7 +3,7 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS  += perl
-PERL_MAJOR   := 5.41
+PERL_MAJOR   := 5.40
 PERL_VERSION := $(PERL_MAJOR).1
 PERL_API_V   := $(PERL_MAJOR).0
 PERL_CROSS_V := 1.5.3
