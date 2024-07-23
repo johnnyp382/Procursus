@@ -12,6 +12,7 @@ autoconf-setup: setup
 	$(call EXTRACT_TAR,autoconf-$(AUTOCONF_VERSION).tar.gz,autoconf-$(AUTOCONF_VERSION),autoconf)
 	sed -i 's/libtoolize/glibtoolize/g' $(BUILD_WORK)/autoconf/bin/autoreconf.in
 	sed -i 's/libtoolize/glibtoolize/g' $(BUILD_WORK)/autoconf/man/autoreconf.1
+	$(call DO_PATCH,ucl,ucl,-p1)
 
 ifneq ($(wildcard $(BUILD_WORK)/autoconf/.build_complete),)
 autoconf:
