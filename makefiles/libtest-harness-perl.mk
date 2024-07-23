@@ -3,7 +3,7 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS                  += libtest-harness-perl
-LIBTEST-HARNESS-PERL_VERSION := 3.42
+LIBTEST-HARNESS-PERL_VERSION := 3.49_02
 DEB_LIBTEST-HARNESS-PERL_V   ?= $(LIBTEST-HARNESS-PERL_VERSION)
 
 libtest-harness-perl-setup: setup
