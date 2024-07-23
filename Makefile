@@ -1090,9 +1090,9 @@ ifneq ($(shell tic -V | grep -q 'ncurses 6' && echo 1),1)
 $(error Install ncurses 6)
 endif
 
-ifneq (,$(wildcard /opt/procursus/share/xml/docbook/stylesheet/docbook-xsl))
-DOCBOOK_XSL := /opt/procursus/share/xml/docbook/stylesheet/docbook-xsl
-export XML_CATALOG_FILES=/opt/procursus/etc/xml/catalog
+ifneq (,$(wildcard /var/jb/usr/share/xml/docbook/stylesheet/docbook-xsl))
+DOCBOOK_XSL := /var/jb/usr/share/xml/docbook/stylesheet/docbook-xsl
+export XML_CATALOG_FILES=/var/jb/etc/xml/catalog
 else ifneq (,$(wildcard /usr/share/xml/docbook/stylesheet/docbook-xsl))
 DOCBOOK_XSL := /usr/share/xml/docbook/stylesheet/docbook-xsl
 export XML_CATALOG_FILES=/etc/xml/catalog
