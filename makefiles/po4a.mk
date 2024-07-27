@@ -3,7 +3,7 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS  += po4a
-PO4A_VERSION := 0.63
+PO4A_VERSION := 0.73
 DEB_PO4A_V   ?= $(PO4A_VERSION)
 
 po4a-setup: setup
