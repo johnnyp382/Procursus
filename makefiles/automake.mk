@@ -7,7 +7,7 @@ AUTOMAKE_VERSION  := 1.17
 DEB_AUTOMAKE_V    ?= $(AUTOMAKE_VERSION)
 
 automake-setup: setup
-	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://git.savannah.gnu.org/cgit/automake.git/snapshot/automake-$(AUTOMAKE_VERSION).tar.gz{$(comma).sig})
+	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://mirrors.ibiblio.org/gnu/automake/automake-$(AUTOMAKE_VERSION).tar.gz{$(comma).sig})
 	$(call PGP_VERIFY,automake-$(AUTOMAKE_VERSION).tar.gz)
 	$(call EXTRACT_TAR,automake-$(AUTOMAKE_VERSION).tar.gz,automake-$(AUTOMAKE_VERSION),automake)
 
