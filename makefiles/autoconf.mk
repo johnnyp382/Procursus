@@ -10,8 +10,8 @@ autoconf-setup: setup
 	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://git.savannah.gnu.org/cgit/autoconf.git/snapshot/autoconf-$(AUTOCONF_VERSION).tar.gz{$(comma).sig})
 	$(call PGP_VERIFY,autoconf-$(AUTOCONF_VERSION).tar.gz)
 	$(call EXTRACT_TAR,autoconf-$(AUTOCONF_VERSION).tar.gz,autoconf-$(AUTOCONF_VERSION),autoconf)
-	sed -i 's/libtoolize/glibtoolize/g' $(BUILD_WORK)/autoconf/bin/autoreconf.in
-	sed -i 's/libtoolize/glibtoolize/g' $(BUILD_WORK)/autoconf/man/autoreconf.1
+	sed -i 's/libtoolize/glibtoolize/g' $(BUILD_WORK)/autoconf/bin/autoconf.in
+	sed -i 's/libtoolize/glibtoolize/g' $(BUILD_WORK)/autoconf/man/autoconf.1
 
 ifneq ($(wildcard $(BUILD_WORK)/autoconf/.build_complete),)
 autoconf:
