@@ -7,7 +7,7 @@ AUTOCONF-ARCHIVE_VERSION := 2023.02.20
 DEB_AUTOCONF-ARCHIVE_V   ?= $(AUTOCONF-ARCHIVE_VERSION)
 
 autoconf-archive-setup: setup
-	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://git.savannah.gnu.org/cgit/autoconf-archive.git/snapshot/autoconf-archive-$(AUTOCONF-ARCHIVE_VERSION).tar.xz{$(comma).sig})
+	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://mirrors.ibiblio.org/gnu/autoconf-archive/autoconf-archive-$(AUTOCONF-ARCHIVE_VERSION).tar.xz{$(comma).sig})
 	$(call PGP_VERIFY,autoconf-archive-$(AUTOCONF-ARCHIVE_VERSION).tar.xz)
 	$(call EXTRACT_TAR,autoconf-archive-$(AUTOCONF-ARCHIVE_VERSION).tar.xz,autoconf-archive-$(AUTOCONF-ARCHIVE_VERSION),autoconf-archive)
 
