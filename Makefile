@@ -420,20 +420,11 @@ ifeq ($(origin TARGET_SYSROOT), undefined)
 TARGET_SYSROOT  != xcrun --sdk $(PLATFORM) --show-sdk-path
 endif
 ifeq ($(origin MACOSX_SYSROOT), undefined)
-MACOSX_SYSROOT  != xcrun --show-sdk-path
+MACOSX_SYSROOT  != xcrun --sdk $(PLATFORM) --show-sdk-path
 endif
 CC              != xcrun --find cc
 CXX             != xcrun --find c++
 CPP             := $(CC) -E
-RANLIB          != xcrun --find ranlib
-AR              != xcrun --find ar
-STRINGS         != xcrun --find strings
-STRIP           != xcrun --find strip
-NM              != xcrun --find nm
-LIPO            != xcrun --find lipo
-OTOOL           != xcrun --find otool
-I_N_T           != xcrun --find install_name_tool
-LIBTOOL         != xcrun --find libtool
 PATH            := /opt/procursus/bin:/opt/procursus/libexec/gnubin:/usr/bin:$(PATH)
 
 CFLAGS_FOR_BUILD   := -arch $(shell uname -m) -mmacosx-version-min=$(shell sw_vers -productVersion) -isysroot $(MACOSX_SYSROOT)
@@ -446,8 +437,8 @@ else
 ifneq ($(MEMO_QUIET),1)
 $(warning Building on iOS)
 endif # ($(MEMO_QUIET),1)
-TARGET_SYSROOT  ?= /usr/share/SDKs/$(BARE_PLATFORM).sdk
-MACOSX_SYSROOT  ?= /usr/share/SDKs/MacOSX.sdk
+TARGET_SYSROOT  ?= /var/jb/usr/share/SDKs/iPhoneOS.sdk
+MACOSX_SYSROOT  ?= /var/jb/usr/share/SDKs/MacOSX.sdk
 CC              != command -v cc
 CXX             != command -v c++
 CPP             := $(CC) -E
@@ -1508,6 +1499,7 @@ ifeq (,$(findstring darwin,$(MEMO_TARGET)))
 	@cp -af $(MACOSX_SYSROOT)/usr/include/mach/machine/*.defs $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/mach/machine
 	@cp -af $(MACOSX_SYSROOT)/usr/include/rpc/pmap_clnt.h $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/rpc
 	@cp -af $(MACOSX_SYSROOT)/usr/include/rpcsvc/yp{_prot,clnt}.h $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/rpcsvc
+	@cp -af $(MACOSX_SYSROOT)/usr/include/mach-o/{i386,x86_64,arm} $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/mach-o
 	@cp -af $(TARGET_SYSROOT)/usr/include/mach/machine/thread_state.h $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/mach/machine
 	@cp -af $(TARGET_SYSROOT)/usr/include/mach/arm $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/mach
 	@cp -af $(BUILD_INFO)/availability.h $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/os
