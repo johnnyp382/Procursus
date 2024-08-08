@@ -12,10 +12,10 @@ DEB_PERL_V   ?= $(PERL_VERSION)
 export PERL_MAJOR
 
 perl-setup: setup
-	$(call DOWNLOAD_FILES,$(BUILD_SOURCE), https://github.com/Perl/perl5/releases/tag/v$(PERL_VERSION).tar.gz \
+	$(call DOWNLOAD_FILES,$(BUILD_SOURCE), https://www.cpan.org/src/5.0/perl-$(PERL_VERSION).tar.gz \
 		https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_V)/perl-cross-$(PERL_CROSS_V).tar.gz)
 	rm -rf $(BUILD_WORK)/perl
-	$(call EXTRACT_TAR,perl$(PERL_VERSION).tar.gz,perl$(PERL_VERSION),perl)
+	$(call EXTRACT_TAR,perl-$(PERL_VERSION).tar.gz,perl-$(PERL_VERSION),perl)
 	chmod -R +w $(BUILD_WORK)/perl
 	$(call EXTRACT_TAR,perl-cross-$(PERL_CROSS_V).tar.gz,perl-cross-$(PERL_CROSS_V),perl,1)
 	sed -i 's/readelf --syms/nm -g/g' $(BUILD_WORK)/perl/cnf/configure_type.sh
