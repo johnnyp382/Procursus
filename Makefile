@@ -425,6 +425,15 @@ endif
 CC              != xcrun --find cc
 CXX             != xcrun --find c++
 CPP             := $(CC) -E
+RANLIB          != xcrun --find ranlib
+AR              != xcrun --find ar
+STRINGS         != xcrun --find strings
+STRIP           != xcrun --find strip
+NM              != xcrun --find nm
+LIPO            != xcrun --find lipo
+OTOOL           != xcrun --find otool
+I_N_T           != xcrun --find install_name_tool
+LIBTOOL         != xcrun --find libtool
 PATH            := /opt/procursus/bin:/opt/procursus/libexec/gnubin:/usr/bin:$(PATH)
 
 CFLAGS_FOR_BUILD   := -arch $(shell uname -m) -mmacosx-version-min=$(shell sw_vers -productVersion) -isysroot $(MACOSX_SYSROOT)
