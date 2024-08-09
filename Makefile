@@ -422,10 +422,10 @@ endif
 ifeq ($(origin MACOSX_SYSROOT), undefined)
 MACOSX_SYSROOT  != xcrun --sdk $(PLATFORM) --show-sdk-path
 endif
-CC              != xcrun --find cc
-CXX             != xcrun --find c++
-CPP             := $(CC) -E
-PATH            := /opt/procursus/bin:/opt/procursus/libexec/gnubin:/usr/bin:$(PATH)
+CC              := gcc-14
+CXX             := g++-14
+CPP             := cpp-14 -E
+PATH            := /opt/homebrew/Cellar:/opt/homebrew/bin:/opt/homebrew/opt:$(PATH)
 
 CFLAGS_FOR_BUILD   := -arch $(shell uname -m) -mmacosx-version-min=$(shell sw_vers -productVersion) -isysroot $(MACOSX_SYSROOT)
 CPPFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
@@ -442,7 +442,7 @@ MACOSX_SYSROOT  ?= /var/jb/usr/share/SDKs/MacOSX.sdk
 CC              != command -v cc
 CXX             != command -v c++
 CPP             := $(CC) -E
-PATH            := /usr/bin:$(PATH)
+PATH            := /var/jb/usr/bin:$(PATH)
 
 CFLAGS_FOR_BUILD   := -arch $(shell arch) -miphoneos-version-min=$(shell sw_vers -productVersion)
 CPPFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
