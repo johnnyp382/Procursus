@@ -422,10 +422,13 @@ endif
 ifeq ($(origin MACOSX_SYSROOT), undefined)
 MACOSX_SYSROOT  != xcrun --sdk $(PLATFORM) --show-sdk-path
 endif
-CC              := gcc-14
-CXX             := g++-14
-CPP             := cpp-14 -E
-PATH            := /opt/homebrew/Cellar:/opt/homebrew/bin:/opt/homebrew/opt:$(PATH)
+CC              := /opt/homebrew/Cellar/gcc/14.1.0_2/bin/aarch64-apple-darwin23-gcc-14
+CXX             := /opt/homebrew/Cellar/gcc/14.1.0_2/bin/aarch64-apple-darwin23-g++-14
+CPP             := /opt/homebrew/Cellar/gcc/14.1.0_2/bin/cpp-14 -E
+AR      	:= /opt/homebrew/Cellar/gcc/14.1.0_2/bin/aarch64-apple-darwin23-gcc-ar-14
+NM      	:= /opt/homebrew/Cellar/gcc/14.1.0_2/bin/aarch64-apple-darwin23-gcc-nm-14
+RANLIB		:= /opt/homebrew/Cellar/gcc/14.1.0_2/bin/aarch64-apple-darwin23-gcc-ranlib-14
+PATH            := /opt/homebrew/Cellar:/opt/homebrew/bin:/opt/homebrew/opt:/opt/procursus/bin:/opt/procursus/libexec/gnubin:/usr/bin:$(PATH)
 
 CFLAGS_FOR_BUILD   := -arch $(shell uname -m) -mmacosx-version-min=$(shell sw_vers -productVersion) -isysroot $(MACOSX_SYSROOT)
 CPPFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
