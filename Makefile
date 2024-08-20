@@ -18,6 +18,7 @@ endif
 
 # Unset sysroot, we manage that ourselves.
 SYSROOT :=
+PERL_MM_OPT :=
 
 UNAME           != uname -s
 UNAME_M         != uname -m
@@ -433,7 +434,7 @@ CXXFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
 ASFLAGS_FOR_BUILD  := $(CFLAGS_FOR_BUILD)
 LDFLAGS_FOR_BUILD  := $(CFLAGS_FOR_BUILD)
 
-else
+else ifeq ($(shell sw_vers -productName),iPhone OS)
 ifneq ($(MEMO_QUIET),1)
 $(warning Building on iOS)
 endif # ($(MEMO_QUIET),1)
@@ -450,7 +451,24 @@ CXXFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
 ASFLAGS_FOR_BUILD  := $(CFLAGS_FOR_BUILD)
 LDFLAGS_FOR_BUILD  := $(CFLAGS_FOR_BUILD)
 
-endif
+else ifeq ($(shell sw_vers -productName),Apple TVOS)
+ifneq ($(MEMO_QUIET),1)
+$(warning Building on tvOS)
+endif # ($(MEMO_QUIET),1)
+TARGET_SYSROOT  ?= /usr/share/SDKs/$(BARE_PLATFORM).sdk
+MACOSX_SYSROOT  ?= /usr/share/SDKs/MacOSX.sdk
+CC              != command -v cc
+CXX             != command -v c++
+CPP             := $(CC) -E
+PATH            := /usr/bin:$(PATH)
+
+CFLAGS_FOR_BUILD   := -arch $(shell arch) -mappletvos-version-min=$(shell sw_vers -productVersion)
+CPPFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
+CXXFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
+ASFLAGS_FOR_BUILD  := $(CFLAGS_FOR_BUILD)
+LDFLAGS_FOR_BUILD  := $(CFLAGS_FOR_BUILD)
+
+endif # ifeq ($(shell sw_vers -productName),macOS)
 AR              != command -v ar
 LD              != command -v ld
 RANLIB          != command -v ranlib
@@ -463,7 +481,7 @@ I_N_T           != command -v install_name_tool
 LIBTOOL         != command -v libtool
 
 else
-$(error Please  macOS, iOS, Linux, or FreeBSD to build)
+$(error Please use macOS, iOS, tvOS, Linux, or FreeBSD to build)
 endif
 
 CC_FOR_BUILD  := $(shell command -v cc) $(CFLAGS_FOR_BUILD)
@@ -522,7 +540,7 @@ OPTIMIZATION_FLAGS += -flto=thin
 else ifeq ($(MEMO_FORCE_LTO),1)
 OPTIMIZATION_FLAGS += -flto=thin
 # This flag will prevent ld64 from deleting the object file needed for dsymutil to work.
-# I'm not setting this on macOS beca I am unsure if it is needed.
+# I'm not setting this on macOS because I am unsure if it is needed.
 # See: clang(1)
 OPTIMIZATION_FLAGS += -Wl,-object_path_lto,/tmp/lto.o
 endif
@@ -595,6 +613,7 @@ endif
 
 DEFAULT_CMAKE_FLAGS := \
 	-DCMAKE_BUILD_TYPE=$(MEMO_CMAKE_BUILD_TYPE) \
+	-DCMAKE_CROSSCOMPILING=true \
 	-DCMAKE_SYSTEM_NAME=Darwin \
 	-DCMAKE_SYSTEM_PROCESSOR="$(shell echo $(GNU_HOST_TRIPLE) | cut -f1 -d-)" \
 	-DCMAKE_C_FLAGS="$(CFLAGS)" \
@@ -664,7 +683,6 @@ DEFAULT_PERL_MAKE_FLAGS := \
 DEFAULT_PERL_BUILD_FLAGS := \
 	cc=$(CC) \
 	ld=$(CC) \
-	destdir=$(BUILD_STAGE)/libmodule-build-perl \
 	install_base=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
 	install_path=lib=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/share/perl5 \
 	install_path=arch=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/perl5/$${PERL_MAJOR} \
@@ -708,7 +726,7 @@ export DEFAULT_CMAKE_FLAGS DEFAULT_CONFIGURE_FLAGS DEFAULT_PERL_MAKE_FLAGS DEFAU
 HAS_COMMAND = $(shell type $(1) >/dev/null 2>&1 && echo 1)
 ifeq ($(NO_PGP),1)
 ifneq ($(MEMO_QUIET),1)
-PGP_VERIFY  = echo "Skipping verification of $(1) beca NO_PGP was set to 1."
+PGP_VERIFY  = echo "Skipping verification of $(1) because NO_PGP was set to 1."
 else # ($(MEMO_QUIET),1)
 PGP_VERIFY  =
 endif # ($(MEMO_QUIET),1)
@@ -1341,7 +1359,7 @@ rebuild-%:
 
 setup:
 	@mkdir -p \
-		$(BUILD_BASE) $(BUILD_BASE)$(MEMO_PREFIX)/{{,System}/Library/Frameworks,$(MEMO_SUB_PREFIX)/{include/{bsm,objc,os/internal,sys,firehose,CoreFoundation,FSEvents,IOKit/kext,libkern,kern,arm,{mach/,}machine,CommonCrypto,Security,CoreSymbolication,Kernel/{kern,IOKit,libkern},rpc,rpcsvc,xpc/private,ktrace,mach-o,dispatch},lib/pkgconfig,$(MEMO_ALT_PREFIX)/lib}} \
+		$(BUILD_BASE) $(BUILD_BASE)$(MEMO_PREFIX)/{{,System}/Library/Frameworks,$(MEMO_SUB_PREFIX)/{include/{bsm,objc,os/internal,sys,firehose,CoreFoundation,FSEvents,IOKit/kext,libkern,kern,arm,{mach/,}machine,CommonCrypto,corecrypto,Security,CoreSymbolication,Kernel/{kern,IOKit,libkern},rpc,rpcsvc,xpc/private,ktrace,mach-o,dispatch},lib/pkgconfig,$(MEMO_ALT_PREFIX)/lib}} \
 		$(BUILD_SOURCE) $(BUILD_WORK) $(BUILD_STAGE) $(BUILD_STRAP)
 
 	@rm -rf $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/System
@@ -1387,7 +1405,7 @@ setup:
 		https://github.com/apple-oss-distributions/xnu/raw/xnu-10002.41.9/bsd/bsm/audit_kevents.h)
 
 	@$(call DOWNLOAD_FILES,$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/IOKit/kext, \
-		https://github.com/apple-oss-distributions/IOKitr/raw/IOKitr-100065.1.1/kext.subproj/{KextManagerPriv$(comma)OSKext$(comma)OSKextPrivate$(comma)kextmanager_types$(comma){fat$(comma)macho$(comma)misc}_util}.h)
+		https://github.com/apple-oss-distributions/IOKitUser/raw/IOKitUser-100065.1.1/kext.subproj/{KextManagerPriv$(comma)OSKext$(comma)OSKextPrivate$(comma)kextmanager_types$(comma){fat$(comma)macho$(comma)misc}_util}.h)
 
 	@$(call DOWNLOAD_FILES,$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/Security, \
 		https://github.com/apple-oss-distributions/Security/raw/Security-61040.1.3/OSX/libsecurity_keychain/lib/SecKeychainPriv.h \
@@ -1425,7 +1443,7 @@ setup:
 		https://github.com/apple-oss-distributions/xnu/raw/xnu-10002.41.9/iokit/IOKit/IOKitDebug.h)
 
 	@$(call DOWNLOAD_FILES,$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/IOKit/kext, \
-		https://github.com/apple-oss-distributions/IOKitr/raw/IOKitr-100065.1.1/kext.subproj/{KextManagerPriv$(comma)OSKext$(comma)OSKextPrivate$(comma)kextmanager_types$(comma){fat$(comma)macho$(comma)misc}_util}.h)
+		https://github.com/apple-oss-distributions/IOKitUser/raw/IOKitUser-100065.1.1/kext.subproj/{KextManagerPriv$(comma)OSKext$(comma)OSKextPrivate$(comma)kextmanager_types$(comma){fat$(comma)macho$(comma)misc}_util}.h)
 
 	@$(call DOWNLOAD_FILES,$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/Security, \
 		https://github.com/apple-oss-distributions/Security/raw/Security-61040.1.3/OSX/libsecurity_keychain/lib/SecKeychainPriv.h \
@@ -1465,6 +1483,9 @@ setup:
 
 	@$(call DOWNLOAD_FILES,$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/dispatch, \
 		https://github.com/apple-oss-distributions/libdispatch/raw/libdispatch-1462.0.4/private/{private$(comma)benchmark$(comma){apply$(comma)channel$(comma)data$(comma)introspection$(comma)io$(comma)layout$(comma)mach$(comma)queue$(comma)source$(comma)time$(comma)workloop}_private}.h)
+
+	@$(call DOWNLOAD_FILES,$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/corecrypto, \
+		https://github.com/apple-oss-distributions/xnu/raw/xnu-10063.121.3/EXTERNAL_HEADERS/corecrypto/cc{$(comma)digest$(comma)n$(comma)_config$(comma)_impl$(comma)_error$(comma)sha1$(comma)sha2}.h)
 
 	@cp -a $(BUILD_MISC)/{libxml-2.0,zlib}.pc $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/pkgconfig
 
@@ -1510,7 +1531,7 @@ endif
 	@cp -af $(MACOSX_SYSROOT)/System/Library/Frameworks/CoreAudio.framework/Headers/* $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/CoreAudio
 
 	@# Patch headers from $(BARE_PLATFORM).sdk
-	@if [ -f $(TARGET_SYSROOT)/System/Library/Frameworks/CoreFoundation.framework/Headers/CFrNotification.h ]; then sed -E 's/API_UNAVAILABLE(ios, watchos, tvos)//g' < $(TARGET_SYSROOT)/System/Library/Frameworks/CoreFoundation.framework/Headers/CFrNotification.h > $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/CoreFoundation/CFrNotification.h; fi
+	@if [ -f $(TARGET_SYSROOT)/System/Library/Frameworks/CoreFoundation.framework/Headers/CFUserNotification.h ]; then sed -E 's/API_UNAVAILABLE(ios, watchos, tvos)//g' < $(TARGET_SYSROOT)/System/Library/Frameworks/CoreFoundation.framework/Headers/CFUserNotification.h > $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/CoreFoundation/CFUserNotification.h; fi
 	@sed -E s/'__IOS_PROHIBITED|__TVOS_PROHIBITED|__WATCHOS_PROHIBITED'//g < $(TARGET_SYSROOT)/usr/include/stdlib.h > $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/stdlib.h
 	@sed -E s/'__IOS_PROHIBITED|__TVOS_PROHIBITED|__WATCHOS_PROHIBITED'//g < $(TARGET_SYSROOT)/usr/include/time.h > $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/time.h
 	@sed -E s/'__IOS_PROHIBITED|__TVOS_PROHIBITED|__WATCHOS_PROHIBITED'//g < $(TARGET_SYSROOT)/usr/include/unistd.h > $(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/unistd.h
@@ -1571,10 +1592,10 @@ define mootext
 endef
 define helptext
 $(MAKE)                        - Display this text
-$(MAKE) (tool)                 - d to compile only a specified tool.
-$(MAKE) (tool)-package         - d to compile only a specified tool and pack it into a debian package.
-$(MAKE) rebuild-(tool)         - d to recompile only a specified tool after it's already been compiled before.
-$(MAKE) rebuild-(tool)-package - d to recompile only a specified tool after it's already been compiled before and pack it into a debian package.
+$(MAKE) (tool)                 - Used to compile only a specified tool.
+$(MAKE) (tool)-package         - Used to compile only a specified tool and pack it into a debian package.
+$(MAKE) rebuild-(tool)         - Used to recompile only a specified tool after it's already been compiled before.
+$(MAKE) rebuild-(tool)-package - Used to recompile only a specified tool after it's already been compiled before and pack it into a debian package.
 $(MAKE) clean                  - Clean out $(BUILD_STAGE), $(BUILD_BASE), and $(BUILD_WORK).
 $(MAKE) extreme-clean          - Runs `$(MAKE) clean`and cleans out $(BUILD_DIST).
 $(MAKE) package                - Compiles the entire Procursus suite and packs it into debian packages.
@@ -1584,7 +1605,7 @@ $(MAKE) (tool)-deps            - Print the dylibs linked by (tool)
 
 Some influential environmental variables:
 MEMO_TARGET     Can be set to any of the supported host systems. Pretty self explainatory. (Defaults to darwin-arm64)
-MEMO_CFVER      d to set minimum *OS version to compile for.  the CoreFoundation version that coresponds to the OS version you're compiling for. (Defaults to 1700 for iOS 14)
+MEMO_CFVER      Used to set minimum *OS version to compile for. Use the CoreFoundation version that coresponds to the OS version you're compiling for. (Defaults to 1700 for iOS 14)
 NO_PGP          Set to 1 if you want to bypass verifying tarballs with gpg. Useful if you just want a quick build without importing everyone's public keys.
 TARGET_SYSROOT  Path to your chosen iPhone SDK. (Defaults to Xcode default path on macOS and the cctools-port default path on Linux.)
 MACOSX_SYSROOT  Path to your chosen macOS SDK. (Defaults to Xcode default path on macOS and the cctools-port default path on Linux.)
