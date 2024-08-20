@@ -137,7 +137,7 @@ else ifeq ($(MEMO_TARGET),iphoneos-arm64-rootless)
 MEMO_ARCH             := arm64
 PLATFORM              := iphoneos
 DEB_ARCH              := iphoneos-arm64
-GNU_HOST_TRIPLE       := aarch64-apple-darwin23.5.0
+GNU_HOST_TRIPLE       := aarch64-apple-darwin
 PLATFORM_VERSION_MIN  := -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET)
 RUST_TARGET           := aarch64-apple-ios
 GOLANG_OS             := ios
