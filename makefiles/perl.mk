@@ -4,7 +4,7 @@ endif
 
 SUBPROJECTS  += perl
 PERL_MAJOR   := 5.41
-PERL_VERSION := $(PERL_MAJOR).1
+PERL_VERSION := $(PERL_MAJOR).2
 PERL_API_V   := $(PERL_MAJOR).0
 PERL_CROSS_V := 1.6
 DEB_PERL_V   ?= $(PERL_VERSION)
@@ -43,6 +43,9 @@ perl-setup: setup
 	d_clock_nanosleep='undef'\n\
 	d_clock='define'\n\
 	byteorder='12345678'\n\
+	sharpbang='#!'\n\
+	startperl='#!/var/jb/usr/bin/perl'\n\
+	startsh='#!/bin/sh'\n\
 	libperl='libperl.dylib'" > $(BUILD_WORK)/perl/cnf/hints/darwin
 
 ifneq ($(wildcard $(BUILD_WORK)/perl/.build_complete),)
@@ -52,7 +55,7 @@ else
 perl: perl-setup
 	cd $(BUILD_WORK)/perl && \
 	CC='$(CC)' AR='$(AR)' NM='$(NM)' OBJDUMP='objdump' \
-	HOSTCFLAGS='-DPERL_CORE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $(CFLAGS_FOR_BUILD)' \
+	HOSTCFLAGS='-DPERL_CORE -DUSE_CROSS_COMPILE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $(CFLAGS_FOR_BUILD)' \
 	HOSTLDFLAGS='$(LDFLAGS_FOR_BUILD)' \
 	CFLAGS='-DPERL_DARWIN -DPERL_USE_SAFE_PUTENV -DTIME_HIRES_CLOCKID_T -DLIBIOSEXEC_INTERNAL=1 $(patsubst -flto=thin,,$(CFLAGS))' \
 	LDFLAGS='$(patsubst -flto=thin,,$(LDFLAGS))' ./configure \
@@ -60,6 +63,17 @@ perl: perl-setup
 		--target=$(GNU_HOST_TRIPLE) \
 		--sysroot=$(TARGET_SYSROOT) \
 		--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
+		--set d_voidsig='undef'
+		--set d_nanosleep='define'
+		--set d_clock_gettime='define'
+		--set d_clock_getres='define'
+		--set d_clock_nanosleep='undef'
+		--set d_clock='define'
+		--set byteorder='12345678'
+		--set sharpbang='#!'
+		--set startperl='#!/var/jb/usr/bin/perl'
+		--set startsh='#!/bin/sh'
+		-Duseshrplib \
 		-Dusevendorprefix \
 		-Dvendorprefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
 		-Dusethreads \
