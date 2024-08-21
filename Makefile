@@ -629,7 +629,7 @@ DEFAULT_CMAKE_FLAGS := \
 	-DCMAKE_OSX_ARCHITECTURES="$(MEMO_ARCH)"
 
 BUILD_CONFIGURE_FLAGS := \
-	--build=aarch64-apple-darwin23.5.0 \
+	--build=aarch64-apple-darwin \
 	--host=$$($(BUILD_MISC)/config.guess) \
 	--disable-dependency-tracking \
 	CC="$(CC_FOR_BUILD)" \
@@ -642,7 +642,7 @@ BUILD_CONFIGURE_FLAGS := \
 	LDFLAGS="$(LDFLAGS_FOR_BUILD)"
 
 DEFAULT_CONFIGURE_FLAGS := \
-	--build=aarch64-apple-darwin23.5.0 \
+	--build=aarch64-apple-darwin \
 	--host=$(GNU_HOST_TRIPLE) \
 	--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
 	--localstatedir=$(MEMO_PREFIX)/var \
