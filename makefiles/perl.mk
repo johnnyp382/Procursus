@@ -30,7 +30,7 @@ perl-setup: setup
 	sed -i 's/| $$Is{Android}/| $$Is{Darwin}/g' $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
 	sed -i 's/$$Is{Android} )/$$Is{Darwin} )/g' $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
 	sed -i '/$$Is{Solaris} =/a \ \ \ \ $$Is{Darwin}  = $$^O eq '\''darwin'\'';' $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
-	sed -i "s/&& $$^O ne 'darwin' //" $(BUILD_WORK)/perl/ext/Errno/Errno_pm.PL
+	sed -i s/&& $$^O ne 'darwin' // $(BUILD_WORK)/perl/ext/Errno/Errno_pm.PL
 	sed -i "s/$$^O eq 'linux'/\$$Config{gccversion} ne ''/" $(BUILD_WORK)/perl/ext/Errno/Errno_pm.PL
 	sed -i 's/--sysroot=$$sysroot/-isysroot $$sysroot -arch $(MEMO_ARCH) $(PLATFORM_VERSION_MIN)/' $(BUILD_WORK)/perl/cnf/configure_tool.sh
 	sed -i 's|#include "poll.h"|#include "$(TARGET_SYSROOT)/usr/include/poll.h"|g' $(BUILD_WORK)/perl/dist/IO/IO.xs
@@ -46,7 +46,6 @@ perl-setup: setup
 	sharpbang='#!'\n\
 	startperl='#!/var/jb/usr/bin/perl'\n\
 	startsh='#!/bin/sh'\n\
-	osvers='22.1.0'
 	libperl='libperl.dylib'" > $(BUILD_WORK)/perl/cnf/hints/darwin
 
 ifneq ($(wildcard $(BUILD_WORK)/perl/.build_complete),)
@@ -74,7 +73,10 @@ perl: perl-setup
 		--set sharpbang='#!'
 		--set startperl='#!/var/jb/usr/bin/perl'
 		--set startsh='#!/bin/sh'
-		--set osvers='22.1.0'
+		--set-osvers='22.1.0'
+		--set-targetarch='arm64-apple-darwin'
+		--set-build='arm64-apple-darwin'
+		--set-osvers='22.1.0'
 		-Duseshrplib \
 		-Dusevendorprefix \
 		-Dvendorprefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
@@ -85,7 +87,7 @@ perl: perl-setup
 		-Dvendorarch=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/perl5/$(PERL_MAJOR)
 	+$(MAKE) -C $(BUILD_WORK)/perl -j1 \
 		PERL_ARCHIVE=$(BUILD_WORK)/perl/libperl.dylib \
-		LIBS="$(filter -liosexec,$(LDFLAGS))"
+		LIBS=$(filter -liosexec,$(LDFLAGS))
 	+$(MAKE) -C $(BUILD_WORK)/perl install.perl \
 		DESTDIR=$(BUILD_STAGE)/perl
 	$(LN_S) $(PERL_MAJOR) $(BUILD_STAGE)/perl/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/perl5/$(PERL_VERSION)
