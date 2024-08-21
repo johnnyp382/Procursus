@@ -46,6 +46,9 @@ perl-setup: setup
 	sharpbang='#!'\n\
 	startperl='#!/var/jb/usr/bin/perl'\n\
 	startsh='#!/bin/sh'\n\
+	build='arm64e-apple-darwin'
+	targetarch='arm64-apple-darwin'
+	osvers='22.1.0'
 	libperl='libperl.dylib'" > $(BUILD_WORK)/perl/cnf/hints/darwin
 
 ifneq ($(wildcard $(BUILD_WORK)/perl/.build_complete),)
@@ -59,7 +62,7 @@ perl: perl-setup
 	HOSTLDFLAGS='$(LDFLAGS_FOR_BUILD)' \
 	CFLAGS='-DPERL_DARWIN -DPERL_USE_SAFE_PUTENV -DTIME_HIRES_CLOCKID_T -DLIBIOSEXEC_INTERNAL=1 $(patsubst -flto=thin,,$(CFLAGS))' \
 	LDFLAGS='$(patsubst -flto=thin,,$(LDFLAGS))' ./configure \
-		--build=$$($(BUILD_MISC)/config.guess) \
+		--build=arm64e-apple-darwin \
 		--target=$(GNU_HOST_TRIPLE) \
 		--sysroot=$(TARGET_SYSROOT) \
 		--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
@@ -73,6 +76,9 @@ perl: perl-setup
 		--set sharpbang='#!'
 		--set startperl='#!/var/jb/usr/bin/perl'
 		--set startsh='#!/bin/sh'
+		--set osvers='22.1.0'
+		--set build='arm64e-apple-darwin'
+		--set targetarch='arm64-apple-darwin'
 		-Duseshrplib \
 		-Dusevendorprefix \
 		-Dvendorprefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
