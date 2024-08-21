@@ -46,8 +46,8 @@ perl-setup: setup
 	sharpbang='#!'\n\
 	startperl='#!/var/jb/usr/bin/perl'\n\
 	startsh='#!/bin/sh'\n\
-	build='arm64-apple-darwin'
-	targetarch='arm64-apple-darwin'
+	build='aarch64-apple-darwin'
+	targetarch='aarch64-apple-darwin'
 	osvers='22.1.0'
 	libperl='libperl.dylib'" > $(BUILD_WORK)/perl/cnf/hints/darwin
 
@@ -77,8 +77,8 @@ perl: perl-setup
 		--set startperl='#!/var/jb/usr/bin/perl'
 		--set startsh='#!/bin/sh'
 		--set osvers='22.1.0'
-		--set build='arm64-apple-darwin'
-		--set targetarch='arm64-apple-darwin'
+		--set build='aarch64-apple-darwin'
+		--set targetarch='aarch64-apple-darwin'
 		-Duseshrplib \
 		-Dusevendorprefix \
 		-Dvendorprefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
