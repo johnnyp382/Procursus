@@ -59,20 +59,20 @@ perl: perl-setup
 	HOSTLDFLAGS='$(LDFLAGS_FOR_BUILD)' \
 	CFLAGS='-DPERL_DARWIN -DPERL_USE_SAFE_PUTENV -DTIME_HIRES_CLOCKID_T -DLIBIOSEXEC_INTERNAL=1 $(patsubst -flto=thin,,$(CFLAGS))' \
 	LDFLAGS='$(patsubst -flto=thin,,$(LDFLAGS))' ./configure \
-		--build=arm64-apple-darwin \
+		--build=$$($(BUILD_MISC)/config.guess) \
 		--target=$(GNU_HOST_TRIPLE) \
 		--sysroot=$(TARGET_SYSROOT) \
 		--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
-		--set d_voidsig='undef'
-		--set d_nanosleep='define'
-		--set d_clock_gettime='define'
-		--set d_clock_getres='define'
-		--set d_clock_nanosleep='undef'
-		--set d_clock='define'
-		--set byteorder='12345678'
-		--set sharpbang='#!'
-		--set startperl='#!/var/jb/usr/bin/perl'
-		--set startsh='#!/bin/sh'
+		--set-d_voidsig='undef'
+		--set-d_nanosleep='define'
+		--set-d_clock_gettime='define'
+		--set-d_clock_getres='define'
+		--set-d_clock_nanosleep='undef'
+		--set-d_clock='define'
+		--set-byteorder='12345678'
+		--set-sharpbang='#!'
+		--set-startperl='#!/var/jb/usr/bin/perl'
+		--set-startsh='#!/bin/sh'
 		--set-osvers='22.1.0'
 		--set-targetarch='arm64-apple-darwin'
 		--set-build='arm64-apple-darwin'
