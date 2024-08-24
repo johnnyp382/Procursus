@@ -2,10 +2,6 @@ ifneq ($(PROCURSUS),1)
 $(error Use the main Makefile)
 endif
 
-SUBPROJECTS  += perlifneq ($(PROCURSUS),1)
-$(error Use the main Makefile)
-endif
-
 SUBPROJECTS  += perl
 PERL_MAJOR   := 5.40
 PERL_VERSION := $(PERL_MAJOR).0
