@@ -45,7 +45,6 @@ perl-setup: setup
 	byteorder='12345678'\n\
 	sharpbang='#!'\n\
 	startperl='#!/var/jb/usr/bin/perl'\n\
-	startsh='#!/bin/sh'\n\
 	libperl='libperl.dylib'" > $(BUILD_WORK)/perl/cnf/hints/darwin
 
 ifneq ($(wildcard $(BUILD_WORK)/perl/.build_complete),)
@@ -65,7 +64,6 @@ perl: perl-setup
 		--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
 		--set-sharpbang='#!' \
 		--set-startperl='#!/var/jb/usr/bin/perl' \
-		--set-startsh='#!/bin/sh' \
 		-Duseshrplib \
 		-Dusevendorprefix \
 		-Dvendorprefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
