@@ -129,7 +129,7 @@ ifeq ($(wildcard $(BUILD_WORK)/llvm/build/.build_complete),)
 		-DLLVM_TARGET_TRIPLE_ENV="LLVM_TARGET_TRIPLE" \
 		-DLLVM_TARGETS_TO_BUILD="all" \
 		-DLLVM_ENABLE_PROJECTS="bolt;clang;flang;lldb;clang-tools-extra;lld;polly;pstl;mlir;libclc;openmp" \
-		-DLLVM_ENABLE_RUNTIMES="libcxxabi;libcxx" \
+		-DLLVM_ENABLE_RUNTIMES="libcxxabi;libcxx;compiler-rt" \
 		-DLLVM_EXTERNAL_PROJECTS="cmark;swift" \
 		-DLLVM_EXTERNAL_SWIFT_SOURCE_DIR="$(BUILD_WORK)/llvm/swift" \
 		-DLLVM_EXTERNAL_CMARK_SOURCE_DIR="$(BUILD_WORK)/llvm/cmark" \
@@ -237,30 +237,13 @@ ifeq ($(wildcard $(BUILD_WORK)/llvm/build-compiler-rt/.build_complete),)
 		-DCMAKE_INSTALL_NAME_DIR=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/llvm-$(LLVM_MAJOR_V)/lib \
 		-DCMAKE_INSTALL_RPATH=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/llvm-$(LLVM_MAJOR_V) \
 		-DCOMPILER_RT_ENABLE_IOS=ON \
-		-DCOMPILER_RT_ENABLE_TVOS=ON \
-		-DCOMPILER_RT_ENABLE_WATCHOS=ON \
 		-DCOMPILER_RT_ENABLE_MACCATALYST=ON \
-		-DDARWIN_osx_ARCHS="x86_64;x86_64h;arm64;arm64e" \
-		-DDARWIN_ios_ARCHS="armv7;armv7s;arm64;arm64e" \
-		-DDARWIN_iossim_ARCHS="x86_64;arm64" \
-		-DDARWIN_tvos_ARCHS="arm64;arm64e" \
-		-DDARWIN_tvossim_ARCHS="x86_64;arm64" \
-		-DDARWIN_watchos_ARCHS="armv7;armv7s;arm64_32;arm64;arm64e" \
-		-DDARWIN_watchossim_ARCHS="x86_64;arm64" \
-		-DDARWIN_osx_BUILTIN_ARCHS="x86_64;x86_64h;arm64;arm64e" \
-		-DDARWIN_ios_BUILTIN_ARCHS="armv7;armv7s;arm64;arm64e" \
-		-DDARWIN_iossim_BUILTIN_ARCHS="x86_64;arm64" \
-		-DDARWIN_tvos_BUILTIN_ARCHS="arm64;arm64e" \
-		-DDARWIN_tvossim_BUILTIN_ARCHS="x86_64;arm64" \
-		-DDARWIN_watchos_BUILTIN_ARCHS="armv7k;arm64_32;arm64;arm64e" \
-		-DDARWIN_watchossim_BUILTIN_ARCHS="x86_64;arm64" \
-		-DDARWIN_osx_BUILTIN_ALL_POSSIBLE_ARCHS="x86_64;x86_64h;arm64;arm64e" \
-		-DDARWIN_ios_BUILTIN_ALL_POSSIBLE_ARCHS="armv7;armv7s;arm64;arm64e" \
-		-DDARWIN_iossim_BUILTIN_ALL_POSSIBLE_ARCHS="x86_64;arm64" \
-		-DDARWIN_tvos_BUILTIN_ALL_POSSIBLE_ARCHS="arm64;arm64e" \
-		-DDARWIN_tvossim_BUILTIN_ALL_POSSIBLE_ARCHS="x86_64;arm64" \
-		-DDARWIN_watchos_BUILTIN_ALL_POSSIBLE_ARCHS="armv7k;arm64_32;arm64;arm64e" \
-		-DDARWIN_watchossim_BUILTIN_ALL_POSSIBLE_ARCHS="x86_64;arm64" \
+		-DDARWIN_osx_ARCHS="arm64;arm64e" \
+		-DDARWIN_ios_ARCHS="arm64;arm64e" \
+		-DDARWIN_osx_BUILTIN_ARCHS="arm64;arm64e" \
+		-DDARWIN_ios_BUILTIN_ARCHS="arm64;arm64e" \
+		-DDARWIN_osx_BUILTIN_ALL_POSSIBLE_ARCHS="arm64;arm64e" \
+		-DDARWIN_ios_BUILTIN_ALL_POSSIBLE_ARCHS="arm64;arm64e" \
 		$(BUILD_WORK)/llvm/llvm
 	+unset MACOSX_DEPLOYMENT_TARGET IPHONEOS_DEPLOYMENT_TARGET APPLETVOS_DEPLOYMENT_TARGET WATCHOS_DEPLOYMENT_TARGET BRIDGEOS_DEPLOYMENT_TARGET && \
 	$(MAKE) -C $(BUILD_WORK)/llvm/build-compiler-rt install-compiler-rt \
