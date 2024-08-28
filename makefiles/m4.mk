@@ -7,7 +7,7 @@ M4_VERSION  := 1.4
 DEB_M4_V    ?= $(M4_VERSION)-1
 
 m4-setup: setup
-	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://git.savannah.gnu.org/cgit/m4.git/snapshot/m4-branch-$(M4_VERSION).tar.gz{$(comma).sig})
+	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://git.savannah.gnu.org/cgit/m4.git/snapshot/m4-branch-$(M4_VERSION).tar.gz)
 	$(call PGP_VERIFY,m4-$(M4_VERSION).tar.gz)
 	$(call EXTRACT_TAR,m4-$(M4_VERSION).tar.gz,m4-$(M4_VERSION),m4)
 
