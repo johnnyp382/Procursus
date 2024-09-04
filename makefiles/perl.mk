@@ -3,10 +3,10 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS  += perl
-PERL_MAJOR   := 5.32
-PERL_VERSION := $(PERL_MAJOR).1
+PERL_MAJOR   := 5.40
+PERL_VERSION := $(PERL_MAJOR).0
 PERL_API_V   := $(PERL_MAJOR).0
-PERL_CROSS_V := 1.3.5
+PERL_CROSS_V := 1.6
 DEB_PERL_V   ?= $(PERL_VERSION)
 
 export PERL_MAJOR
@@ -59,6 +59,9 @@ perl: perl-setup
 		--build=$$($(BUILD_MISC)/config.guess) \
 		--target=$(GNU_HOST_TRIPLE) \
 		--sysroot=$(TARGET_SYSROOT) \
+		--startperl=#!/var/jb/usr/bin/perl \
+		--startsh=#!/var/jb/bin/sh \
+		--sh=/var/jb/bin/sh \
 		--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
 		-Duseshrplib \
 		-Dusevendorprefix \
