@@ -3,10 +3,10 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS  += perl
-PERL_MAJOR   := 5.40
-PERL_VERSION := $(PERL_MAJOR).0
+PERL_MAJOR   := 5.32
+PERL_VERSION := $(PERL_MAJOR).1
 PERL_API_V   := $(PERL_MAJOR).0
-PERL_CROSS_V := 1.6
+PERL_CROSS_V := 1.3.5
 DEB_PERL_V   ?= $(PERL_VERSION)
 
 export PERL_MAJOR
@@ -43,8 +43,6 @@ perl-setup: setup
 	d_clock_nanosleep='undef'\n\
 	d_clock='define'\n\
 	byteorder='12345678'\n\
-	sharpbang='#!'\n\
-	startperl='#!/var/jb/usr/bin/perl'\n\
 	libperl='libperl.dylib'" > $(BUILD_WORK)/perl/cnf/hints/darwin
 
 ifneq ($(wildcard $(BUILD_WORK)/perl/.build_complete),)
@@ -62,8 +60,6 @@ perl: perl-setup
 		--target=$(GNU_HOST_TRIPLE) \
 		--sysroot=$(TARGET_SYSROOT) \
 		--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
-		--set-sharpbang='#!' \
-		--set-startperl='#!/var/jb/usr/bin/perl' \
 		-Duseshrplib \
 		-Dusevendorprefix \
 		-Dvendorprefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
