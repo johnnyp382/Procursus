@@ -59,8 +59,6 @@ perl: perl-setup
 		--build=$$($(BUILD_MISC)/config.guess) \
 		--target=$(GNU_HOST_TRIPLE) \
 		--sysroot=$(TARGET_SYSROOT) \
-		--startperl=#!/var/jb/usr/bin/perl \
-		--startsh=#!/var/jb/bin/sh \
 		--sh=/var/jb/bin/sh \
 		--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
 		-Duseshrplib \
