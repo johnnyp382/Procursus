@@ -3,8 +3,8 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS      += ruby
-RUBY_API_VERSION := 3.4
-RUBY_VERSION     := $(RUBY_API_VERSION).0
+RUBY_API_VERSION := 3.3
+RUBY_VERSION     := $(RUBY_API_VERSION).5
 DEB_RUBY_V       ?= $(RUBY_VERSION)
 
 ###
@@ -14,7 +14,7 @@ DEB_RUBY_V       ?= $(RUBY_VERSION)
 ###
 
 ruby-setup: setup
-	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://cache.ruby-lang.org/pub/ruby/$(RUBY_API_VERSION)/ruby-$(RUBY_VERSION)-preview1.tar.gz)
+	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://cache.ruby-lang.org/pub/ruby/$(RUBY_API_VERSION)/ruby-$(RUBY_VERSION).tar.gz)
 	$(call EXTRACT_TAR,ruby-$(RUBY_VERSION).tar.gz,ruby-$(RUBY_VERSION),ruby)
 
 ifneq (,$(findstring amd64,$(MEMO_TARGET)))
@@ -38,6 +38,8 @@ ruby: ruby-setup libxcrypt libgmp10 libjemalloc ncurses readline openssl libyaml
 	cd $(BUILD_WORK)/ruby && LIBS="-lcrypt" \
 		./configure -C \
 			$(DEFAULT_CONFIGURE_FLAGS) \
+			--build=$$($(BUILD_MISC)/config.guess) \
+			--host=$(GNU_HOST_TRIPLE) \
 			--target=$(GNU_HOST_TRIPLE) \
 			--with-arch=$(MEMO_ARCH) \
 			--with-jemalloc \
