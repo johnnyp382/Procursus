@@ -43,8 +43,6 @@ perl-setup: setup
 	d_clock_nanosleep='undef'\n\
 	d_clock='define'\n\
 	byteorder='12345678'\n\
-	targetsh='/var/bin/sh'\n\
-	startperl='/var/bin/perl'\n\
 	libperl='libperl.dylib'" > $(BUILD_WORK)/perl/cnf/hints/darwin
 
 ifneq ($(wildcard $(BUILD_WORK)/perl/.build_complete),)
