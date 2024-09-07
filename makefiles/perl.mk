@@ -3,8 +3,8 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS  += perl
-PERL_MAJOR   := 5.40
-PERL_VERSION := $(PERL_MAJOR).0
+PERL_MAJOR   := 5.41
+PERL_VERSION := $(PERL_MAJOR).3
 PERL_API_V   := $(PERL_MAJOR).0
 PERL_CROSS_V := 1.6
 DEB_PERL_V   ?= $(PERL_VERSION)
@@ -43,7 +43,8 @@ perl-setup: setup
 	d_clock_nanosleep='undef'\n\
 	d_clock='define'\n\
 	byteorder='12345678'\n\
-	targetsh='/var/jb/bin/sh'\n\
+	targetsh='/var/bin/sh'\n\
+	startperl='/var/bin/perl'\n\
 	libperl='libperl.dylib'" > $(BUILD_WORK)/perl/cnf/hints/darwin
 
 ifneq ($(wildcard $(BUILD_WORK)/perl/.build_complete),)
