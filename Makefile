@@ -423,8 +423,8 @@ endif
 ifeq ($(origin MACOSX_SYSROOT), undefined)
 MACOSX_SYSROOT  != xcrun --show-sdk-path
 endif
-CC              != xcrun --find clang
-CXX             != xcrun --find clang++
+CC              != xcrun --find cc
+CXX             != xcrun --find c++
 CPP             := $(CC) -E
 PATH            := /opt/procursus/bin:/opt/procursus/libexec/gnubin:/usr/bin:$(PATH)
 
