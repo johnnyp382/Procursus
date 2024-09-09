@@ -3,7 +3,7 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS   += ninja
-NINJA_VERSION := 1.11.1
+NINJA_VERSION := 1.12.1
 DEB_NINJA_V   ?= $(NINJA_VERSION)
 
 ninja-setup: setup
