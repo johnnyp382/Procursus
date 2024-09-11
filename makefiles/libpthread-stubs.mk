@@ -3,7 +3,7 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS              += libpthread-stubs
-LIBPTHREAD-STUBS_VERSION := 0.4
+LIBPTHREAD-STUBS_VERSION := 0.5
 DEB_LIBPTHREAD-STUBS_V   ?= $(LIBPTHREAD-STUBS_VERSION)
 
 libpthread-stubs-setup: setup
