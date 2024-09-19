@@ -418,7 +418,7 @@ ifneq ($(MEMO_QUIET),1)
 $(warning Building on MacOS)
 endif # ($(MEMO_QUIET),1)
 ifeq ($(origin TARGET_SYSROOT), undefined)
-TARGET_SYSROOT  != xcrun --sdk $(PLATFORM) --show-sdk-path
+TARGET_SYSROOT  := /opt/procursus/share/SDKs/iPhoneOS.sdk
 endif
 ifeq ($(origin MACOSX_SYSROOT), undefined)
 MACOSX_SYSROOT  != xcrun --show-sdk-path
@@ -426,7 +426,7 @@ endif
 CC              != xcrun --find cc
 CXX             != xcrun --find c++
 CPP             := $(CC) -E
-PATH            := /opt/procursus/bin:/opt/procursus/libexec/gnubin:/usr/bin:$(PATH)
+PATH            := /opt/procursus/bin:/opt/procursus/share:/opt/procursus/libexec/gnubin:/usr/bin:$(PATH)
 
 CFLAGS_FOR_BUILD   := -arch $(shell uname -m) -mmacosx-version-min=$(shell sw_vers -productVersion) -isysroot $(MACOSX_SYSROOT)
 CPPFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
