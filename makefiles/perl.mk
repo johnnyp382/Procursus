@@ -61,9 +61,8 @@ perl: perl-setup
 		--sysroot=$(TARGET_SYSROOT) \
 		--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
 		-Duseshrplib \
-		-Dsh=/var/jb/usr/bin/bash
-		-Dstartsh=/jb/usr/bin/bash
-		-Dextras=Module::Build ExtUtils::InstallPaths ExtUtils::Config Term::ReadKey Term::UI YAML Log::Message Log::Message::Simple Term::CLI Term::ReadLine::Gnu Term::ReadLine::Perl5 Term::CLI::ReadLine Module::Install File::Remove Module::ScanDeps
+		-Dtargetsh=/jb/usr/bin/bash \
+		-Dextras=Module::Build ExtUtils::InstallPaths ExtUtils::Config Term::ReadKey Term::UI YAML Log::Message Log::Message::Simple Term::CLI Term::ReadLine::Gnu Term::ReadLine::Perl5 Term::CLI::ReadLine Module::Install File::Remove Module::ScanDeps \
 		-Dusevendorprefix \
 		-Dvendorprefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
 		-Dusethreads \
