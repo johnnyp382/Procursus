@@ -139,7 +139,7 @@ MEMO_ARCH             := arm64
 PLATFORM              := iphoneos
 DEB_ARCH              := iphoneos-arm64
 GNU_HOST_TRIPLE       := arm-apple-darwin22.1.0
-PLATFORM_VERSION_MIN  := -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET)
+PLATFORM_VERSION_MIN  := -miphoneos-version-min=16.0
 RUST_TARGET           := aarch64-apple-ios
 GOLANG_OS             := ios
 LLVM_TARGET           := arm64-apple-ios$(IPHONEOS_DEPLOYMENT_TARGET)
