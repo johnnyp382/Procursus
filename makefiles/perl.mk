@@ -27,9 +27,9 @@ perl-setup: setup
 	sed -i '/-Wl,-E/ s/^/#/' $(BUILD_WORK)/perl/cnf/configure_tool.sh
 	sed -i '/-Wl,-E/ s/^/#/' $(BUILD_WORK)/perl/Makefile
 	sed -i 's/$$(CC) $$(LDDLFLAGS)/$$(CC) $$(LDDLFLAGS) -compatibility_version $(PERL_API_V) -current_version $(PERL_VERSION) -install_name $$(archlib)\/CORE\/$$@/g' $(BUILD_WORK)/perl/Makefile
-	sed -i 's/| $$Is{Android}/| $$Is{Darwin}/g' $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
-	sed -i 's/$$Is{Android} )/$$Is{Darwin} )/g' $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
-	sed -i '/$$Is{Solaris} =/a \ \ \ \ $$Is{Darwin}  = $$^O eq '\''darwin'\'';' $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
+	sed -i 's/| $$Is{Android}/| $$Is{Darwin}/g' $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Darwin.pm $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MY.pm
+	sed -i 's/$$Is{Android} )/$$Is{Darwin} )/g' $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Darwin.pm $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MY.pm
+	sed -i '/$$Is{Solaris} =/a \ \ \ \ $$Is{Darwin}  = $$^O eq '\''darwin'\'';' $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Darwin.pm $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MY.pm
 	sed -i "s/&& $$^O ne 'darwin' //" $(BUILD_WORK)/perl/ext/Errno/Errno_pm.PL
 	sed -i "s/$$^O eq 'linux'/\$$Config{gccversion} ne ''/" $(BUILD_WORK)/perl/ext/Errno/Errno_pm.PL
 	sed -i 's/--sysroot=$$sysroot/-isysroot $$sysroot -arch $(MEMO_ARCH) $(PLATFORM_VERSION_MIN)/' $(BUILD_WORK)/perl/cnf/configure_tool.sh
@@ -55,24 +55,24 @@ perl: perl-setup
 	HOSTCFLAGS='-DPERL_CORE -DUSE_CROSS_COMPILE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $(CFLAGS_FOR_BUILD)' \
 	HOSTLDFLAGS='$(LDFLAGS_FOR_BUILD)' \
 	CFLAGS='-DPERL_DARWIN -DPERL_USE_SAFE_PUTENV -DTIME_HIRES_CLOCKID_T -DLIBIOSEXEC_INTERNAL=1 $(patsubst -flto=thin,,$(CFLAGS))' \
-	LDFLAGS='$(patsubst -flto=thin,,$(LDFLAGS))' ./configure -Dextras='App::Cpan CPAN::Perl::Releases Perl::Tidy Cwd File::Spec File::Spec::Functions File::Spec::Mac File::Spec::Unix Path::Class Path::Class::Dir Path::Class::Entity Path::Class::File HTTP::Tiny App::perlbrew App::cpm App:Uni App:Cpan App::url App:URLUtils CPAN::Plugin App::Cmd App::Cmd::ArgProcessor App::Cmd::Command App::Cmd::Command::commands App::Cmd::Command::help App::Cmd::Plugin App::Cmd::Setup App::Cmd::Simple App::Cmd::Subdispatch App::Cmd::Subdispatch::DashedStyle  Capture::Tiny Devel::PatchPerl ExtUtils::Command ExtUtils::MM ExtUtils::Command::MM ExtUtils::Liblist ExtUtils::MakeMaker ExtUtils::MakeMaker::Config ExtUtils::Mkbootstrap File::Copy File::Temp JSON::PP Pod::Usage local::lib Module::Build ExtUtils::Install ExtUtils::InstallPaths ExtUtils::Config ExtUtils::Config::MakeMaker ExtUtils::Helpers ExtUtils::Autoconf ExtUtils::HasCompiler ExtUtils::MM_Darwin ExtUtils::MY  Term::ReadKey Term::UI YAML Log::Message Log::Message::Simple Term::CLI Term::ReadLine::Gnu Term::ReadLine::Perl5 Term::CLI::ReadLine Module::Install File::Remove Module::ScanDeps Module::Signature ExtUtils::InstallPaths ExtUtils::Config Term::ReadKey Term::UI YAML Log::Message Log::Message::Simple Term::CLI Term::ReadLine::Gnu Term::ReadLine::Perl5 Term::CLI::ReadLine Module::Install File::Remove Module::ScanDeps App::cpanminus Log::Log4perl Path::Tiny Tie::Array Env Env::Bash Env::Path Config::ENV CPAN::Plugin CPAN::Plugin::Specfile CPAN::HandleConfig Fcntl App::a2p App::find2perl MIME::Parser grep File::Path Carp Scalar::Util XSLoader warnings Function::Parameters App::cpm App::cpm::CLI Capture::Tiny Getopt::Long Sub::Identify Sub::Name Try::Tiny feature local::lib strict lazy Config::Model Digest::MD5 Encode Encode::Locale File::Copy File::Listing File::Temp Getopt::Long HTML::Entities HTML::HeadParser HTTP::Cookies HTTP::Date HTTP::Negotiate HTTP::Request HTTP::Request::Common HTTP::Response HTTP::Status IO::Select IO::Socket LWP::MediaTypes MIME::Base64 Module::Load Net::FTP Net::HTTP Scalar::Util Try::Tiny URI URI::Escape WWW::RobotRules parent LWP LWP::Curl LWP::UserAgent Getopt::Long' \
+	LDFLAGS='$(patsubst -flto=thin,,$(LDFLAGS))' ./configure \
 		--build=$$($(BUILD_MISC)/config.guess) \
 		--target=$(GNU_HOST_TRIPLE) \
 		--sysroot=$(TARGET_SYSROOT) \
 		--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
 		-Duseshrplib \
-		-Dtargetsh=/var/jb/usr/bin/bash \
-		-Dstartperl=/var/jb/usr/bin/perl \
+		-Dextras="App::Cpan CPAN::Perl::Releases App::Perlbrew::HTTP App::Perlbrew::Path App::Perlbrew::Path::Installation App::Perlbrew::Path::Installations App::Perlbrew::Path::Root App::Perlbrew::Sys App::Perlbrew::Util Capture::Tiny Devel::PatchPerl ExtUtils::MakeMaker File::Copy File::Temp JSON::PP Pod::Usage local::lib App::perlbrew App::Perlbrew::HTTP App::Perlbrew::Path App::Perlbrew::Path::Installation App::Perlbrew::Path::Installations App::Perlbrew::Path::Root App::Perlbrew::Sys App::Perlbrew::Util Module::Build Module::Signature ExtUtils::InstallPaths ExtUtils::Config Term::ReadKey Term::UI YAML Log::Message Log::Message::Simple Term::CLI Term::ReadLine::Gnu Term::ReadLine::Perl5 Term::CLI::ReadLine Module::Install File::Remove Module::ScanDeps App::cpanminus Log::Log4perl Path::Tiny Tie::Array Env Env::Bash Env::Path Config::ENV CPAN::Plugin CPAN::Plugin::Specfile CPAN::HandleConfig Fcntl App::a2p App::find2perl MIME::Parser grep File::Path Carp Scalar::Util XSLoader warnings Function::Parameters App::cpm App::cpm::CLI Capture::Tiny Getopt::Long Sub::Identify Sub::Name Try::Tiny feature local::lib strict lazy Config::Model Digest::MD5 Encode Encode::Locale File::Copy File::Listing File::Temp Getopt::Long HTML::Entities HTML::HeadParser HTTP::Cookies HTTP::Date HTTP::Negotiate HTTP::Request HTTP::Request::Common HTTP::Response HTTP::Status IO::Select IO::Socket LWP::MediaTypes MIME::Base64 Module::Load Net::FTP Net::HTTP Scalar::Util Try::Tiny URI URI::Escape WWW::RobotRules parent LWP LWP::Curl LWP::UserAgent Getopt::Long" \
+		-Dusevendorprefix \
 		-Dvendorprefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
 		-Dusethreads \
 		-Dvendorlib=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/share/perl5 \
 		-Dprivlib=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/perl5/$(PERL_MAJOR) \
 		-Darchlib=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/perl5/$(PERL_MAJOR) \
 		-Dvendorarch=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/perl5/$(PERL_MAJOR)
-	+$(MAKE) -C $(BUILD_WORK)/perl -j1 \
+	+$(GMAKE) -C $(BUILD_WORK)/perl -j1 \
 		PERL_ARCHIVE=$(BUILD_WORK)/perl/libperl.dylib \
 		LIBS="$(filter -liosexec,$(LDFLAGS))"
-	+$(MAKE) -C $(BUILD_WORK)/perl install.perl \
+	+$(GMAKE) -C $(BUILD_WORK)/perl install.perl \
 		DESTDIR=$(BUILD_STAGE)/perl
 	$(LN_S) $(PERL_MAJOR) $(BUILD_STAGE)/perl/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/perl5/$(PERL_VERSION)
 	chmod -R u+w $(BUILD_STAGE)/perl/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/perl5/$(PERL_MAJOR)
