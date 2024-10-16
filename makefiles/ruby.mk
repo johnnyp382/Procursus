@@ -27,7 +27,7 @@ ifneq ($(wildcard $(BUILD_WORK)/ruby/.build_complete),)
 ruby:
 	@echo "Using previously built ruby."
 else
-ruby: ruby-setup libxcrypt libgmp10 libjemalloc ncurses readline openssl libyaml libffi
+ruby: ruby-setup 
 	mkdir -p $(BUILD_WORK)/ruby/nativebuild
 	cd $(BUILD_WORK)/ruby/nativebuild && env -i ../configure $(BUILD_CONFIGURE_FLAGS) --prefix=$(BUILD_WORK)/ruby/nativebuild/install --disable-install-rdoc --disable-install-doc
 	+$(MAKE) -C $(BUILD_WORK)/ruby/nativebuild install
