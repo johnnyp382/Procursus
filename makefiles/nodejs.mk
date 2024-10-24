@@ -3,15 +3,15 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS        += nodejs
-NODEJS_VERSION     := 17.0.1
+NODEJS_VERSION     := 23.0.0
 DEB_NODEJS_V       ?= $(NODEJS_VERSION)
 
 SUBPROJECTS        += nodejs-lts
-NODEJS_LTS_VERSION := 16.13.0
+NODEJS_LTS_VERSION := 20.18.0
 DEB_NODEJS_LTS_V   ?= $(NODEJS_LTS_VERSION)
 
-ifeq ($(UNAME),Linux)
-NODEJS_HOST := linux
+ifeq ($(UNAME),MacOS)
+NODEJS_HOST := macOS
 endif
 
 ifeq ($(PLATFORM),iphoneos)
