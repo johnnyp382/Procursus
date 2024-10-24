@@ -10,13 +10,9 @@ SUBPROJECTS        += nodejs-lts
 NODEJS_LTS_VERSION := 20.18.0
 DEB_NODEJS_LTS_V   ?= $(NODEJS_LTS_VERSION)
 
-ifeq ($(UNAME),MacOS)
-NODEJS_HOST := macOS
-endif
+NODEJS_HOST := mac
 
-ifeq ($(PLATFORM),iphoneos)
 NODEJS_TARGET := ios
-endif
 
 NODEJS_COMMON_FLAGS := \
 	--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
