@@ -138,7 +138,7 @@ else ifeq ($(MEMO_TARGET),iphoneos-arm64-rootless)
 MEMO_ARCH             := arm64
 PLATFORM              := iphoneos
 DEB_ARCH              := iphoneos-arm64
-GNU_HOST_TRIPLE       := arm64-apple-darwin22.1.0
+GNU_HOST_TRIPLE       := aarch64-apple-darwin22.1.0
 PLATFORM_VERSION_MIN  := -miphoneos-version-min=16.0
 RUST_TARGET           := aarch64-apple-ios
 GOLANG_OS             := ios
@@ -299,7 +299,7 @@ else ifeq ($(MEMO_TARGET),darwin-arm64e)
 MEMO_ARCH             := arm64e
 PLATFORM              := macosx
 DEB_ARCH              := darwin-arm64e
-GNU_HOST_TRIPLE       := arm64-apple-darwin23.5.0
+GNU_HOST_TRIPLE       := aarch64-apple-darwin23.5.0
 RUST_TARGET           := $(GNU_HOST_TRIPLE)
 GOLANG_OS             := darwin
 LLVM_TARGET           := arm64e-apple-macos$(MACOSX_DEPLOYMENT_TARGET)
@@ -317,7 +317,7 @@ else ifeq ($(MEMO_TARGET),darwin-arm64)
 MEMO_ARCH             := arm64
 PLATFORM              := macosx
 DEB_ARCH              := darwin-arm64
-GNU_HOST_TRIPLE       := aarch64-apple-darwin
+GNU_HOST_TRIPLE       := aarch64-apple-darwin23.5.0
 RUST_TARGET           := $(GNU_HOST_TRIPLE)
 GOLANG_OS             := darwin
 LLVM_TARGET           := arm64-apple-macos$(MACOSX_DEPLOYMENT_TARGET)
@@ -631,7 +631,6 @@ DEFAULT_CMAKE_FLAGS := \
 BUILD_CONFIGURE_FLAGS := \
 	--build=$$($(BUILD_MISC)/config.guess) \
 	--host=$$($(BUILD_MISC)/config.guess) \
-	--target=arm-apple-darwin22.1.0 \
 	--disable-dependency-tracking \
 	CC="$(CC_FOR_BUILD)" \
 	CXX="$(CXX_FOR_BUILD)" \
@@ -645,7 +644,6 @@ BUILD_CONFIGURE_FLAGS := \
 DEFAULT_CONFIGURE_FLAGS := \
 	--build=$$($(BUILD_MISC)/config.guess) \
 	--host=$(GNU_HOST_TRIPLE) \
-	--target=arm-apple-darwin22.1.0 \
 	--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
 	--localstatedir=$(MEMO_PREFIX)/var \
 	--sysconfdir=$(MEMO_PREFIX)/etc \
