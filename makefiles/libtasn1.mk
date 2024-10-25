@@ -3,11 +3,11 @@ $(error Use the main Makefile)
 endif
 
 STRAPPROJECTS    += libtasn1
-LIBTASN1_VERSION := 4.19.0
+LIBTASN1_VERSION := v4.19.0
 DEB_LIBTASN1_V   ?= $(LIBTASN1_VERSION)
 
 libtasn1-setup: setup
-	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://github.com/gnutls/libtasn1/archive/refs/tags/v$(LIBTASN1_VERSION).tar.gz{$(comma).sig})
+	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://github.com/gnutls/libtasn1/archive/refs/tags/v4.19.0.tar.gz{$(comma).sig})
 	$(call PGP_VERIFY,libtasn1-$(LIBTASN1_VERSION).tar.gz)
 	$(call EXTRACT_TAR,libtasn1-$(LIBTASN1_VERSION).tar.gz,libtasn1-$(LIBTASN1_VERSION),libtasn1)
 
