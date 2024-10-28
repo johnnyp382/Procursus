@@ -46,8 +46,12 @@ nodejs:
 else ifneq ($(wildcard $(BUILD_WORK)/nodejs/.build_complete),)
 nodejs:
 	@echo "Using previously built nodejs."
+ifdef USE_SYSTEM_LIBS
+nodejs: nodejs-setup
+	@echo "Using system libraries for nodejs build."
 else
 nodejs: nodejs-setup nghttp2 openssl brotli libc-ares libuv1
+endif
 	cd $(BUILD_WORK)/nodejs;\
 	CC_host="$(CC_FOR_BUILD)" \
 	CXX_host="$(CXX_FOR_BUILD) -std=gnu++14" \
@@ -64,10 +68,11 @@ nodejs: nodejs-setup nghttp2 openssl brotli libc-ares libuv1
 	PKG_CONFIG_PATH="$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/pkgconfig" \
 	GYP_DEFINES="target_arch=$(MEMO_ARCH) host_os=$(NODEJS_HOST) target_os=$(NODEJS_TARGET)" \
 	./configure \
+	$(if $(USE_SYSTEM_LIBS),--shared-nghttp2 --shared-openssl --shared-brotli --shared-libuv --shared-cares,) \
 		$(NODEJS_COMMON_FLAGS)
 
-	+$(MAKE) -C $(BUILD_WORK)/nodejs
-	+$(MAKE) -C $(BUILD_WORK)/nodejs install \
+	+$(MAKE) USE_SYSTEM_LIBS=1 -C $(BUILD_WORK)/nodejs
+	+$(MAKE) USE_SYSTEM_LIBS=1 -C $(BUILD_WORK)/nodejs install \
 		DESTDIR=$(BUILD_STAGE)/nodejs
 
 	mkdir -p $(BUILD_STAGE)/nodejs/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
@@ -84,8 +89,12 @@ nodejs-lts:
 else ifneq ($(wildcard $(BUILD_WORK)/nodejs-lts/.build_complete),)
 nodejs-lts:
 	@echo "Using previously built nodejs-lts."
+ifdef USE_SYSTEM_LIBS
+nodejs: nodejs-setup
+	@echo "Using system libraries for nodejs build."
 else
-nodejs-lts: nodejs-lts-setup nghttp2 openssl brotli libc-ares libuv1
+nodejs: nodejs-setup nghttp2 openssl brotli libc-ares libuv1
+endif
 	cd $(BUILD_WORK)/nodejs-lts;\
 	CC_host="$(CC_FOR_BUILD)" \
 	CXX_host="$(CXX_FOR_BUILD) -std=gnu++14" \
@@ -102,11 +111,12 @@ nodejs-lts: nodejs-lts-setup nghttp2 openssl brotli libc-ares libuv1
 	PKG_CONFIG_PATH="$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/pkgconfig" \
 	GYP_DEFINES="target_arch=$(MEMO_ARCH) host_os=$(NODEJS_HOST) target_os=$(NODEJS_TARGET)" \
 	./configure \
+	$(if $(USE_SYSTEM_LIBS),--shared-nghttp2 --shared-openssl --shared-brotli --shared-libuv --shared-cares,) \
 		$(NODEJS_COMMON_FLAGS) \
 		--shared-openssl
 
-	+$(MAKE) -C $(BUILD_WORK)/nodejs-lts
-	+$(MAKE) -C $(BUILD_WORK)/nodejs-lts install \
+	+$(MAKE) USE_SYSTEM_LIBS=1 -C $(BUILD_WORK)/nodejs-lts
+	+$(MAKE) USE_SYSTEM_LIBS=1 -C $(BUILD_WORK)/nodejs-lts install \
 		DESTDIR=$(BUILD_STAGE)/nodejs
 
 	mkdir -p $(BUILD_STAGE)/nodejs-lts/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
