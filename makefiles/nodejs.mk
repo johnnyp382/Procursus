@@ -71,9 +71,9 @@ endif
 	$(if $(USE_SYSTEM_LIBS),--shared-nghttp2 --shared-openssl --shared-brotli --shared-libuv --shared-cares,) \
 		$(NODEJS_COMMON_FLAGS)
 
-	+$(MAKE) -C $(BUILD_WORK)/nodejs
-	+$(MAKE) -C $(BUILD_WORK)/nodejs install \
-		DESTDIR=$(BUILD_STAGE)/nodejs
+    +$(MAKE) USE_SYSTEM_LIBS=1 -C $(BUILD_WORK)/nodejs
+    +$(MAKE) USE_SYSTEM_LIBS=1 -C $(BUILD_WORK)/nodejs install \
+        DESTDIR=$(BUILD_STAGE)/nodejs
 
 	mkdir -p $(BUILD_STAGE)/nodejs/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
 	cp -a $(BUILD_WORK)/nodejs/out/Release/node $(BUILD_STAGE)/nodejs/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
@@ -88,9 +88,13 @@ nodejs-lts:
 	@echo "nodejs-lts building not supported on this target os."
 else ifneq ($(wildcard $(BUILD_WORK)/nodejs-lts/.build_complete),)
 nodejs-lts:
-	@echo "Using previously built nodejs-lts."
+    @echo "Using previously built nodejs-lts."
+ifdef USE_SYSTEM_LIBS
+nodejs-lts: nodejs-lts-setup
+    @echo "Using system libraries for nodejs build."
 else
 nodejs-lts: nodejs-lts-setup nghttp2 openssl brotli libc-ares libuv1
+endif
 	cd $(BUILD_WORK)/nodejs-lts;\
 	CC_host="$(CC_FOR_BUILD)" \
 	CXX_host="$(CXX_FOR_BUILD) -std=gnu++14" \
