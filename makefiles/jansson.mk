@@ -7,10 +7,10 @@ JANSSON_VERSION := 2.14
 DEB_JANSSON_V   ?= $(JANSSON_VERSION)
 
 jansson-setup: setup
-	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://github.com/akheron/jansson/releases/download/v$(JANSSON_VERSION)/jansson-$(JANSSON_VERSION).tar.gz)
-	$(call EXTRACT_TAR,jansson-$(JANSSON_VERSION).tar.gz,jansson-$(JANSSON_VERSION),jansson)
-
+    # Clone the jansson repository
+    git clone --branch v$(JANSSON_VERSION) https://github.com/akheron/jansson.git $(BUILD_WORK)/jansson
 ifneq ($(wildcard $(BUILD_WORK)/jansson/.build_complete),)
+
 jansson:
 	@echo "Using previously built jansson."
 else
