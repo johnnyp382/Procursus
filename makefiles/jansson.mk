@@ -6,15 +6,17 @@ SUBPROJECTS     += jansson
 JANSSON_VERSION := 2.14-1
 DEB_JANSSON_V   ?= $(JANSSON_VERSION)
 
-jansson-setup: setup
-    # Clone the jansson repository
-    git clone --branch https://github.com/akheron/jansson.git $(BUILD_WORK)/jansson
-ifneq ($(wildcard $(BUILD_WORK)/jansson/.build_complete),)
+# Repositories
+# You can replace them with your own fork.
+REPO_URL	:= https://github.com/akheron/jansson
 
+ifneq ($(wildcard $(BUILD_WORK)/jansson/.build_complete),)
 jansson:
 	@echo "Using previously built jansson."
 else
-jansson: jansson-setup
+jansson:
+	cd $(BUILD_WORK) && git clone $(REPO_URL)
+	autoreconf --install $(BUILD_WORK)/jansson && cd ../
 	cd $(BUILD_WORK)/jansson && ./configure \
 		$(DEFAULT_CONFIGURE_FLAGS)
 	+$(MAKE) -C $(BUILD_WORK)/jansson
