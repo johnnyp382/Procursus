@@ -3,20 +3,16 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS        += nodejs
-NODEJS_VERSION     := 17.0.1
+NODEJS_VERSION     := 23.0.0
 DEB_NODEJS_V       ?= $(NODEJS_VERSION)
 
 SUBPROJECTS        += nodejs-lts
-NODEJS_LTS_VERSION := 16.13.0
+NODEJS_LTS_VERSION := 20.18.0
 DEB_NODEJS_LTS_V   ?= $(NODEJS_LTS_VERSION)
 
-ifeq ($(UNAME),Linux)
-NODEJS_HOST := linux
-endif
+NODEJS_HOST := mac
 
-ifeq ($(PLATFORM),iphoneos)
 NODEJS_TARGET := ios
-endif
 
 NODEJS_COMMON_FLAGS := \
 	--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
@@ -50,8 +46,12 @@ nodejs:
 else ifneq ($(wildcard $(BUILD_WORK)/nodejs/.build_complete),)
 nodejs:
 	@echo "Using previously built nodejs."
+ifdef USE_SYSTEM_LIBS
+nodejs: nodejs-setup
+    @echo "Using system libraries for nodejs build."
 else
 nodejs: nodejs-setup nghttp2 openssl brotli libc-ares libuv1
+endif
 	cd $(BUILD_WORK)/nodejs;\
 	CC_host="$(CC_FOR_BUILD)" \
 	CXX_host="$(CXX_FOR_BUILD) -std=gnu++14" \
@@ -62,12 +62,13 @@ nodejs: nodejs-setup nghttp2 openssl brotli libc-ares libuv1
 	LDFLAGS_host="$(LDFLAGS_FOR_BUILD)" \
 	SDKROOT="$(TARGET_SYSROOT)" \
 	CXX="$(CXX) -std=gnu++14" \
-	CFLAGS="$(CFLAGS) -Wreturn-type -DOPENSSLDIR=$(MEMO_PREFIX)/etc/ssl" \
+	CFLAGS="$(CFLAGS) -Wreturn-type -DOPENSSLDIR=/opt/procursus/etc/ssl" \
 	CXXFLAGS="$(CXXFLAGS)" \
 	LDFLAGS="$(LDFLAGS) -undefined dynamic_lookup" \
 	PKG_CONFIG_PATH="$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/pkgconfig" \
 	GYP_DEFINES="target_arch=$(MEMO_ARCH) host_os=$(NODEJS_HOST) target_os=$(NODEJS_TARGET)" \
 	./configure \
+	$(if $(USE_SYSTEM_LIBS),--shared-nghttp2 --shared-openssl --shared-brotli --shared-libuv --shared-cares,) \
 		$(NODEJS_COMMON_FLAGS)
 
 	+$(MAKE) -C $(BUILD_WORK)/nodejs
