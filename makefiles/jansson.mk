@@ -3,12 +3,12 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS     += jansson
-JANSSON_VERSION := 2.14
+JANSSON_VERSION := 2.14-1
 DEB_JANSSON_V   ?= $(JANSSON_VERSION)
 
 jansson-setup: setup
     # Clone the jansson repository
-    git clone --branch v$(JANSSON_VERSION) https://github.com/akheron/jansson.git $(BUILD_WORK)/jansson
+    git clone --branch https://github.com/akheron/jansson.git $(BUILD_WORK)/jansson
 ifneq ($(wildcard $(BUILD_WORK)/jansson/.build_complete),)
 
 jansson:
