@@ -110,13 +110,14 @@ endif
 	LDFLAGS="$(LDFLAGS) -undefined dynamic_lookup" \
 	PKG_CONFIG_PATH="$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/pkgconfig" \
 	GYP_DEFINES="target_arch=$(MEMO_ARCH) host_os=$(NODEJS_HOST) target_os=$(NODEJS_TARGET)" \
-	./configure \
-		$(NODEJS_COMMON_FLAGS) \
-		--shared-openssl
+    ./configure \
+    $(if $(USE_SYSTEM_LIBS),--shared-nghttp2 --shared-openssl --shared-brotli --shared-libuv --shared-cares,) \
+        $(NODEJS_COMMON_FLAGS) \
+        --shared-openssl
 
-	+$(MAKE) -C $(BUILD_WORK)/nodejs-lts
-	+$(MAKE) -C $(BUILD_WORK)/nodejs-lts install \
-		DESTDIR=$(BUILD_STAGE)/nodejs
+    +$(MAKE) USE_SYSTEM_LIBS=1 -C $(BUILD_WORK)/nodejs-lts
+    +$(MAKE) USE_SYSTEM_LIBS=1 -C $(BUILD_WORK)/nodejs-lts install \
+        DESTDIR=$(BUILD_STAGE)/nodejs
 
 	mkdir -p $(BUILD_STAGE)/nodejs-lts/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
 	cp -a $(BUILD_WORK)/nodejs-lts/out/Release/node $(BUILD_STAGE)/nodejs-lts/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
