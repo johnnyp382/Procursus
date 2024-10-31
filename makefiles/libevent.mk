@@ -3,19 +3,19 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS        += libevent
-LIBEVENT_VERSION   := 2.1.12
+LIBEVENT_VERSION   := 2.1.12-1
 DEB_LIBEVENT_V     ?= $(LIBEVENT_VERSION)-3
 
-libevent-setup: setup
-	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://github.com/libevent/libevent/releases/download/release-$(LIBEVENT_VERSION)-stable/libevent-$(LIBEVENT_VERSION)-stable.tar.gz{$(comma).asc})
-	$(call PGP_VERIFY,libevent-$(LIBEVENT_VERSION)-stable.tar.gz,asc)
-	$(call EXTRACT_TAR,libevent-$(LIBEVENT_VERSION)-stable.tar.gz,libevent-$(LIBEVENT_VERSION)-stable,libevent)
+# Repositories
+# You can replace them with your own fork.
+REPO_URL	:= https://github.com/libevent/libevent
 
 ifneq ($(wildcard $(BUILD_WORK)/libevent/.build_complete),)
 libevent:
 	@echo "Using previously built libevent."
 else
-libevent: libevent-setup openssl
+libevent:
+	cd $(BUILD_WORK) && git clone $(REPO_URL) && cd ../
 	cd $(BUILD_WORK)/libevent && cmake . \
 		$(DEFAULT_CMAKE_FLAGS) \
 		-DEVENT__LIBRARY_TYPE:STRING=BOTH \
@@ -72,4 +72,3 @@ libevent-package: libevent-stage
 	rm -rf $(BUILD_DIST)/libevent-{{core-,extra-,openssl-,pthreads-,}2.1-7,dev}
 
 .PHONY: libevent libevent-package
-
