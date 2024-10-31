@@ -3,20 +3,21 @@ $(error Use the main Makefile)
 endif
 
 STRAPPROJECTS    += libtasn1
-LIBTASN1_VERSION := v4.19.0
+LIBTASN1_VERSION := 4.19.0-1
 DEB_LIBTASN1_V   ?= $(LIBTASN1_VERSION)
 
-libtasn1-setup: setup
-	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://github.com/gnutls/libtasn1/archive/refs/tags/v4.19.0.tar.gz{$(comma).sig})
-	$(call PGP_VERIFY,libtasn1-$(LIBTASN1_VERSION).tar.gz)
-	$(call EXTRACT_TAR,libtasn1-$(LIBTASN1_VERSION).tar.gz,libtasn1-$(LIBTASN1_VERSION),libtasn1)
+# Repositories
+# You can replace them with your own fork.
+REPO_URL	:= https://github.com/gnutls/libtasn1
 
 ifneq ($(wildcard $(BUILD_WORK)/libtasn1/.build_complete),)
-libtasn1:
+jansson:
 	@echo "Using previously built libtasn1."
 else
-libtasn1: libtasn1-setup
-	cd $(BUILD_WORK)/libtasn1 && ./configure -C \
+libtasn1:
+	cd $(BUILD_WORK) && git clone $(REPO_URL) && cd ../
+	cd $(BUILD_WORK)/libtasn1 && ./bootstrap && cd ../
+	cd $(BUILD_WORK)/libtasn1 && ./configure \
 		$(DEFAULT_CONFIGURE_FLAGS)
 	+$(MAKE) -C $(BUILD_WORK)/libtasn1
 	+$(MAKE) -C $(BUILD_WORK)/libtasn1 install \
