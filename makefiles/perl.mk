@@ -70,10 +70,10 @@ perl: perl-setup
 		-Dprivlib=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/perl5/$(PERL_MAJOR) \
 		-Darchlib=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/perl5/$(PERL_MAJOR) \
 		-Dvendorarch=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/perl5/$(PERL_MAJOR)
-	+$(GMAKE -C) $(BUILD_WORK)/perl -j1 \
+	+$(GMAKE) --directory $(BUILD_WORK)/perl -j1 \
 		PERL_ARCHIVE=$(BUILD_WORK)/perl/libperl.dylib \
 		LIBS="$(filter -liosexec,$(LDFLAGS))"
-	+$(GMAKE -C) $(BUILD_WORK)/perl install.perl \
+	+$(GMAKE) --directory $(BUILD_WORK)/perl install.perl \
 		DESTDIR=$(BUILD_STAGE)/perl
 	chmod -R u+w $(BUILD_STAGE)/perl/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/perl5/$(PERL_MAJOR)
 	$(call AFTER_BUILD)
