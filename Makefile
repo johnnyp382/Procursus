@@ -445,7 +445,7 @@ CXX             != command -v c++
 CPP             := $(CC) -E
 PATH            := /usr/bin:$(PATH)
 
-CFLAGS_FOR_BUILD   := -arch $(shell arch) -miphoneos-version-min=16.0
+CFLAGS_FOR_BUILD   := -arch $(shell arch) -target=arm64-apple-ios16.0 -march=armv8.6a -mcpu=apple-a15 -miphoneos-version-min=16.0
 CPPFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
 CXXFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
 ASFLAGS_FOR_BUILD  := $(CFLAGS_FOR_BUILD)
@@ -550,7 +550,7 @@ ifdef ($(MEMO_ALT_LTO_LIB))
 OPTIMIZATION_FLAGS += -lto_library $(MEMO_ALT_LTO_LIB)
 endif
 
-CFLAGS              := $(OPTIMIZATION_FLAGS) -arch $(MEMO_ARCH) -march=armv8.6a -mcpu=apple-a15 -isysroot $(TARGET_SYSROOT) $(PLATFORM_VERSION_MIN) -isystem$(TARGET_SYSROOT)/usr/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include -F$(BUILD_BASE)$(MEMO_PREFIX)/System/Library/Frameworks -F$(BUILD_BASE)$(MEMO_PREFIX)/Library/Frameworks
+CFLAGS              := $(OPTIMIZATION_FLAGS) -arch $(MEMO_ARCH) -target=arm64-apple-ios16.0 -march=armv8.6a -mcpu=apple-a15 -isysroot $(TARGET_SYSROOT) $(PLATFORM_VERSION_MIN) -isystem$(TARGET_SYSROOT)/usr/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include -F$(BUILD_BASE)$(MEMO_PREFIX)/System/Library/Frameworks -F$(BUILD_BASE)$(MEMO_PREFIX)/Library/Frameworks
 CXXFLAGS            := $(CFLAGS) -isystem$(TARGET_SYSROOT)/usr/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include/c++/v1
 ASFLAGS             := $(CFLAGS)
 CPPFLAGS            := -arch $(MEMO_ARCH) -march=armv8.6a -mcpu=apple-a15 $(PLATFORM_VERSION_MIN) -isysroot $(TARGET_SYSROOT) -isystem$(TARGET_SYSROOT)/usr/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include -isystem$(TARGET_SYSROOT)/usr/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include
@@ -615,7 +615,7 @@ DEFAULT_CMAKE_FLAGS := \
 	-DCMAKE_BUILD_TYPE=$(MEMO_CMAKE_BUILD_TYPE) \
 	-DCMAKE_CROSSCOMPILING=true \
 	-DCMAKE_SYSTEM_NAME=Darwin \
-	-DCMAKE_SYSTEM_PROCESSOR="$(shell echo $(GNU_HOST_TRIPLE) | cut -f1 -d-)" \
+	-DCMAKE_SYSTEM_PROCESSOR=arm64-apple-ios \
 	-DCMAKE_C_FLAGS="$(CFLAGS)" \
 	-DCMAKE_CXX_FLAGS="$(CXXFLAGS)" \
 	-DCMAKE_FIND_ROOT_PATH="$(BUILD_BASE)" \
@@ -626,7 +626,7 @@ DEFAULT_CMAKE_FLAGS := \
 	-DCMAKE_INSTALL_RPATH="$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)" \
 	-DCMAKE_INSTALL_SYSCONFDIR="$(MEMO_PREFIX)/etc" \
 	-DCMAKE_OSX_SYSROOT="$(TARGET_SYSROOT)" \
-	-DCMAKE_OSX_ARCHITECTURES="$(MEMO_ARCH)"
+	-DCMAKE_OSX_ARCHITECTURES=arm64
 
 BUILD_CONFIGURE_FLAGS := \
 	--build=$$($(BUILD_MISC)/config.guess) \
