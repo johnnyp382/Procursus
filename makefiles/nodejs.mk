@@ -3,7 +3,7 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS        += nodejs
-NODEJS_VERSION     := 23.0.0
+NODEJS_VERSION     := 23.1.0
 DEB_NODEJS_V       ?= $(NODEJS_VERSION)
 
 SUBPROJECTS        += nodejs-lts
@@ -13,21 +13,6 @@ DEB_NODEJS_LTS_V   ?= $(NODEJS_LTS_VERSION)
 NODEJS_HOST := mac
 
 NODEJS_TARGET := ios
-
-NODEJS_COMMON_FLAGS := \
-	--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
-	--dest-os=$(NODEJS_TARGET) \
-	--dest-cpu=$(MEMO_ARCH) \
-	--cross-compiling \
-	--without-npm \
-	--shared \
-	--shared-zlib \
-	--shared-libuv \
-	--shared-brotli \
-	--shared-nghttp2 \
-	--shared-cares \
-	--openssl-use-def-ca-store \
-	--with-intl=full-icu --download=all
 
 nodejs-setup: setup
 	$(call GITHUB_ARCHIVE,1Conan,node,v$(NODEJS_VERSION),v$(NODEJS_VERSION)-ios)
@@ -64,7 +49,20 @@ nodejs: nodejs-setup nghttp2 openssl brotli libc-ares libuv1
 	PKG_CONFIG_PATH="$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/pkgconfig" \
 	GYP_DEFINES="target_arch=$(MEMO_ARCH) host_os=$(NODEJS_HOST) target_os=$(NODEJS_TARGET)" \
 	./configure \
-		$(NODEJS_COMMON_FLAGS)
+		--shared-openssl \
+		--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
+		--dest-os=$(NODEJS_TARGET) \
+		--dest-cpu=$(MEMO_ARCH) \
+		--cross-compiling \
+		--without-npm \
+		--shared \
+		--shared-zlib \
+		--shared-libuv \
+		--shared-brotli \
+		--shared-nghttp2 \
+		--shared-cares \
+		--openssl-use-def-ca-store \
+		--with-intl=full-icu --download=all
 
 	+$(MAKE) -C $(BUILD_WORK)/nodejs
 	+$(MAKE) -C $(BUILD_WORK)/nodejs install \
@@ -102,8 +100,20 @@ nodejs-lts: nodejs-lts-setup nghttp2 openssl brotli libc-ares libuv1
 	PKG_CONFIG_PATH="$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/pkgconfig" \
 	GYP_DEFINES="target_arch=$(MEMO_ARCH) host_os=$(NODEJS_HOST) target_os=$(NODEJS_TARGET)" \
 	./configure \
-		$(NODEJS_COMMON_FLAGS) \
-		--shared-openssl
+		--shared-openssl \
+		--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
+		--dest-os=$(NODEJS_TARGET) \
+		--dest-cpu=$(MEMO_ARCH) \
+		--cross-compiling \
+		--without-npm \
+		--shared \
+		--shared-zlib \
+		--shared-libuv \
+		--shared-brotli \
+		--shared-nghttp2 \
+		--shared-cares \
+		--openssl-use-def-ca-store \
+		--with-intl=full-icu --download=all
 
 	+$(MAKE) -C $(BUILD_WORK)/nodejs-lts
 	+$(MAKE) -C $(BUILD_WORK)/nodejs-lts install \
