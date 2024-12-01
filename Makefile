@@ -418,7 +418,7 @@ ifneq ($(MEMO_QUIET),1)
 $(warning Building on MacOS)
 endif # ($(MEMO_QUIET),1)
 ifeq ($(origin TARGET_SYSROOT), undefined)
-TARGET_SYSROOT  := $HOME/iPhoneOS.sdk
+TARGET_SYSROOT  := /var/jb/usr/share/SDKs/iPhoneOS.sdk
 endif
 ifeq ($(origin MACOSX_SYSROOT), undefined)
 MACOSX_SYSROOT  != xcrun --show-sdk-path
