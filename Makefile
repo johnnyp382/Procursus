@@ -418,7 +418,7 @@ ifneq ($(MEMO_QUIET),1)
 $(warning Building on MacOS)
 endif # ($(MEMO_QUIET),1)
 ifeq ($(origin TARGET_SYSROOT), undefined)
-TARGET_SYSROOT  := /var/jb/usr/share/SDKs/iPhoneOS.sdk
+TARGET_SYSROOT  := /Users/john/actions-runner/_work/run-procursus/run-procursus/build_tools/iPhoneOS.sdk
 endif
 ifeq ($(origin MACOSX_SYSROOT), undefined)
 MACOSX_SYSROOT  != xcrun --show-sdk-path
@@ -614,7 +614,7 @@ endif
 DEFAULT_CMAKE_FLAGS := \
 	-DCMAKE_BUILD_TYPE=$(MEMO_CMAKE_BUILD_TYPE) \
 	-DCMAKE_CROSSCOMPILING=true \
-	-DCMAKE_SYSTEM_NAME=Darwin \
+	-DCMAKE_SYSTEM_NAME=iOS \
 	-DCMAKE_SYSTEM_PROCESSOR=arm64-apple-ios \
 	-DCMAKE_C_FLAGS="$(CFLAGS)" \
 	-DCMAKE_CXX_FLAGS="$(CXXFLAGS)" \
