@@ -1139,14 +1139,7 @@ PATH := $(BUILD_TOOLS):$(PATH)
 
 MAKEFLAGS += --no-print-directory
 
-ifeq ($(findstring --jobserver-auth=,$(MAKEFLAGS)),)
-ifeq ($(call HAS_COMMAND,nproc),1)
-CORE_COUNT ?= $(shell nproc)
-else
-CORE_COUNT ?= $(shell sysctl -n hw.ncpu)
-endif
-MAKEFLAGS += --jobs=$(CORE_COUNT)
-endif
+MAKEFLAGS += --jobs=8
 
 PROCURSUS := 1
 
