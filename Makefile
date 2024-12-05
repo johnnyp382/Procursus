@@ -418,7 +418,7 @@ ifneq ($(MEMO_QUIET),1)
 $(warning Building on MacOS)
 endif # ($(MEMO_QUIET),1)
 ifeq ($(origin TARGET_SYSROOT), undefined)
-TARGET_SYSROOT  := $THEOS/sdks/iPhoneOS16.5.sdk
+TARGET_SYSROOT  != xcrun --sdk $(PLATFORM) --show-sdk-path
 endif
 ifeq ($(origin MACOSX_SYSROOT), undefined)
 MACOSX_SYSROOT  != xcrun --show-sdk-path
@@ -550,7 +550,7 @@ ifdef ($(MEMO_ALT_LTO_LIB))
 OPTIMIZATION_FLAGS += -lto_library $(MEMO_ALT_LTO_LIB)
 endif
 
-CFLAGS              := $(OPTIMIZATION_FLAGS) -arch $(MEMO_ARCH) --target=arm64-apple-ios16.0 -march=armv8.6a -mcpu=apple-a15 -isysroot $(TARGET_SYSROOT) $(PLATFORM_VERSION_MIN) -isystem$(TARGET_SYSROOT)/usr/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include -F$(BUILD_BASE)$(MEMO_PREFIX)/System/Library/Frameworks -F$(BUILD_BASE)$(MEMO_PREFIX)/Library/Frameworks
+CFLAGS              := $(OPTIMIZATION_FLAGS) -arch $(MEMO_ARCH) --target arm64-apple-ios16.0 -march=armv8.6a -mcpu=apple-a15 -isysroot $(TARGET_SYSROOT) $(PLATFORM_VERSION_MIN) -isystem$(TARGET_SYSROOT)/usr/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include -F$(BUILD_BASE)$(MEMO_PREFIX)/System/Library/Frameworks -F$(BUILD_BASE)$(MEMO_PREFIX)/Library/Frameworks
 CXXFLAGS            := $(CFLAGS)
 ASFLAGS             := $(CFLAGS)
 CPPFLAGS            := -arch $(MEMO_ARCH) $(PLATFORM_VERSION_MIN) -isysroot $(TARGET_SYSROOT) -isystem$(TARGET_SYSROOT)/usr/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include
