@@ -68,16 +68,16 @@ ifeq ($(wildcard $(BUILD_WORK)/../../native/llvm/.build_complete),)
 		-DCMAKE_OSX_SYSROOT="$(MACOSX_SYSROOT)" \
 		-DSWIFT_INCLUDE_TESTS=OFF \
 		-DSWIFT_BUILD_RUNTIME_WITH_HOST_COMPILER=ON \
-		-DLLVM_TARGETS_TO_BUILD="X86;AArch64" \
-		-DLLVM_ENABLE_PROJECTS="clang;lldb" \
-		-DLLVM_ENABLE_RUNTIMES="libcxxabi;libcxx" \
+		-DLLVM_TARGETS_TO_BUILD="AArch64" \
+		-DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" \
+		-DLLVM_ENABLE_RUNTIMES="libc;libcxxabi;libcxx;compiler-rt" \
 		-DLLVM_EXTERNAL_PROJECTS="cmark;swift" \
 		-DLLVM_EXTERNAL_SWIFT_SOURCE_DIR="$(BUILD_WORK)/llvm/swift" \
 		-DLLVM_EXTERNAL_CMARK_SOURCE_DIR="$(BUILD_WORK)/llvm/cmark" \
 		-DSWIFT_BUILD_REMOTE_MIRROR=FALSE \
-		-DSWIFT_BUILD_DYNAMIC_STDLIB=FALSE \
+		-DSWIFT_BUILD_DYNAMIC_STDLIB=TRUE \
 		-DSWIFT_PATH_TO_SWIFT_SYNTAX_SOURCE="$(BUILD_WORK)/llvm/swift-syntax" \
-		-DSWIFT_BUILD_STDLIB_EXTRA_TOOLCHAIN_CONTENT=FALSE \
+		-DSWIFT_BUILD_STDLIB_EXTRA_TOOLCHAIN_CONTENT=TRUE \
 		$(BUILD_WORK)/llvm/llvm
 	mkdir -p $(BUILD_WORK)/../../native/llvm/share/swift # ¯\_(ツ)_/¯
 	+$(MAKE) -C $(BUILD_WORK)/../../native/llvm swift-components lldb-tblgen
