@@ -438,12 +438,12 @@ else ifeq ($(shell sw_vers -productName),iPhone OS)
 ifneq ($(MEMO_QUIET),1)
 $(warning Building on iOS)
 endif # ($(MEMO_QUIET),1)
-TARGET_SYSROOT  ?= /usr/share/SDKs/$(BARE_PLATFORM).sdk
-MACOSX_SYSROOT  ?= /usr/share/SDKs/MacOSX.sdk
+TARGET_SYSROOT  := /var/jb/usr/share/SDKs/iPhoneOS.sdk
+MACOSX_SYSROOT  := /var/jb/usr/share/SDKs/MacOSX.sdk
 CC              != command -v cc
 CXX             != command -v c++
 CPP             := $(CC) -E
-PATH            := /usr/bin:$(PATH)
+PATH            := /var/jb/usr/bin:$(PATH)
 
 CFLAGS_FOR_BUILD   := -arch $(shell arch) --target=arm64-apple-ios16.0 -march=armv8.6a -mcpu=apple-a15 -miphoneos-version-min=16.0
 CPPFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
