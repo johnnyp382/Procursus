@@ -138,11 +138,11 @@ else ifeq ($(MEMO_TARGET),iphoneos-arm64-rootless)
 MEMO_ARCH             := arm64
 PLATFORM              := iphoneos
 DEB_ARCH              := iphoneos-arm64
-GNU_HOST_TRIPLE       := aarch64-apple-darwin22.1.0
-PLATFORM_VERSION_MIN  := -miphoneos-version-min=16.0
+GNU_HOST_TRIPLE       := aarch64-apple-darwin
+PLATFORM_VERSION_MIN  := -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET)
 RUST_TARGET           := aarch64-apple-ios
 GOLANG_OS             := ios
-LLVM_TARGET           := arm64-apple-ios
+LLVM_TARGET           := arm64-apple-ios$(IPHONEOS_DEPLOYMENT_TARGET)
 MEMO_PREFIX           ?= /var/jb
 MEMO_SUB_PREFIX       ?= /usr
 MEMO_ALT_PREFIX       ?=
@@ -299,7 +299,7 @@ else ifeq ($(MEMO_TARGET),darwin-arm64e)
 MEMO_ARCH             := arm64e
 PLATFORM              := macosx
 DEB_ARCH              := darwin-arm64e
-GNU_HOST_TRIPLE       := aarch64-apple-darwin23.5.0
+GNU_HOST_TRIPLE       := aarch64-apple-darwin
 RUST_TARGET           := $(GNU_HOST_TRIPLE)
 GOLANG_OS             := darwin
 LLVM_TARGET           := arm64e-apple-macos$(MACOSX_DEPLOYMENT_TARGET)
@@ -317,7 +317,7 @@ else ifeq ($(MEMO_TARGET),darwin-arm64)
 MEMO_ARCH             := arm64
 PLATFORM              := macosx
 DEB_ARCH              := darwin-arm64
-GNU_HOST_TRIPLE       := aarch64-apple-darwin23.5.0
+GNU_HOST_TRIPLE       := aarch64-apple-darwin
 RUST_TARGET           := $(GNU_HOST_TRIPLE)
 GOLANG_OS             := darwin
 LLVM_TARGET           := arm64-apple-macos$(MACOSX_DEPLOYMENT_TARGET)
@@ -418,7 +418,7 @@ ifneq ($(MEMO_QUIET),1)
 $(warning Building on MacOS)
 endif # ($(MEMO_QUIET),1)
 ifeq ($(origin TARGET_SYSROOT), undefined)
-TARGET_SYSROOT  != xcrun --show-sdk-path
+TARGET_SYSROOT  != xcrun --sdk $(PLATFORM) --show-sdk-path
 endif
 ifeq ($(origin MACOSX_SYSROOT), undefined)
 MACOSX_SYSROOT  != xcrun --show-sdk-path
@@ -426,7 +426,7 @@ endif
 CC              != xcrun --find cc
 CXX             != xcrun --find c++
 CPP             := $(CC) -E
-PATH            := /opt/procursus/bin:/opt/procursus/share:/opt/procursus/libexec/gnubin:/usr/bin:$(PATH)
+PATH            := /opt/procursus/bin:/opt/procursus/libexec/gnubin:/usr/bin:$(PATH)
 
 CFLAGS_FOR_BUILD   := -arch $(shell uname -m) -mmacosx-version-min=$(shell sw_vers -productVersion) -isysroot $(MACOSX_SYSROOT)
 CPPFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
@@ -438,14 +438,14 @@ else ifeq ($(shell sw_vers -productName),iPhone OS)
 ifneq ($(MEMO_QUIET),1)
 $(warning Building on iOS)
 endif # ($(MEMO_QUIET),1)
-TARGET_SYSROOT  := /var/jb/usr/share/SDKs/iPhoneOS.sdk
-MACOSX_SYSROOT  := /var/jb/usr/share/SDKs/MacOSX.sdk
+TARGET_SYSROOT  ?= /usr/share/SDKs/$(BARE_PLATFORM).sdk
+MACOSX_SYSROOT  ?= /usr/share/SDKs/MacOSX.sdk
 CC              != command -v cc
 CXX             != command -v c++
 CPP             := $(CC) -E
-PATH            := /var/jb/usr/bin:$(PATH)
+PATH            := /usr/bin:$(PATH)
 
-CFLAGS_FOR_BUILD   := -arch $(shell arch) --target=arm64-apple-ios -march=armv8.6a -mcpu=apple-a15 -miphoneos-version-min=16.0
+CFLAGS_FOR_BUILD   := -arch $(shell arch) -miphoneos-version-min=$(shell sw_vers -productVersion)
 CPPFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
 CXXFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
 ASFLAGS_FOR_BUILD  := $(CFLAGS_FOR_BUILD)
@@ -550,7 +550,7 @@ ifdef ($(MEMO_ALT_LTO_LIB))
 OPTIMIZATION_FLAGS += -lto_library $(MEMO_ALT_LTO_LIB)
 endif
 
-CFLAGS              := $(OPTIMIZATION_FLAGS) -arch $(MEMO_ARCH) --target arm64-apple-ios16.0 -march=armv8.6a -mcpu=apple-a15 -isysroot $(TARGET_SYSROOT) -miphoneos-version-min=16.0 -isystem$(TARGET_SYSROOT)/usr/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include -F$(BUILD_BASE)$(MEMO_PREFIX)/System/Library/Frameworks -F$(BUILD_BASE)$(MEMO_PREFIX)/Library/Frameworks
+CFLAGS              := $(OPTIMIZATION_FLAGS) -arch $(MEMO_ARCH) -isysroot $(TARGET_SYSROOT) $(PLATFORM_VERSION_MIN) -isystem$(TARGET_SYSROOT)/usr/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include -F$(BUILD_BASE)$(MEMO_PREFIX)/System/Library/Frameworks -F$(BUILD_BASE)$(MEMO_PREFIX)/Library/Frameworks
 CXXFLAGS            := $(CFLAGS)
 ASFLAGS             := $(CFLAGS)
 CPPFLAGS            := -arch $(MEMO_ARCH) $(PLATFORM_VERSION_MIN) -isysroot $(TARGET_SYSROOT) -isystem$(TARGET_SYSROOT)/usr/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include/c++/v1 -isystem$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/include
@@ -614,8 +614,8 @@ endif
 DEFAULT_CMAKE_FLAGS := \
 	-DCMAKE_BUILD_TYPE=$(MEMO_CMAKE_BUILD_TYPE) \
 	-DCMAKE_CROSSCOMPILING=true \
-	-DCMAKE_SYSTEM_NAME=iOS \
-	-DCMAKE_SYSTEM_PROCESSOR=arm64-apple-ios \
+	-DCMAKE_SYSTEM_NAME=Darwin \
+	-DCMAKE_SYSTEM_PROCESSOR="$(shell echo $(GNU_HOST_TRIPLE) | cut -f1 -d-)" \
 	-DCMAKE_C_FLAGS="$(CFLAGS)" \
 	-DCMAKE_CXX_FLAGS="$(CXXFLAGS)" \
 	-DCMAKE_FIND_ROOT_PATH="$(BUILD_BASE)" \
@@ -626,7 +626,7 @@ DEFAULT_CMAKE_FLAGS := \
 	-DCMAKE_INSTALL_RPATH="$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)" \
 	-DCMAKE_INSTALL_SYSCONFDIR="$(MEMO_PREFIX)/etc" \
 	-DCMAKE_OSX_SYSROOT="$(TARGET_SYSROOT)" \
-	-DCMAKE_OSX_ARCHITECTURES=arm64
+	-DCMAKE_OSX_ARCHITECTURES="$(MEMO_ARCH)"
 
 BUILD_CONFIGURE_FLAGS := \
 	--build=$$($(BUILD_MISC)/config.guess) \
@@ -1139,7 +1139,14 @@ PATH := $(BUILD_TOOLS):$(PATH)
 
 MAKEFLAGS += --no-print-directory
 
-MAKEFLAGS += --jobs=8
+ifeq ($(findstring --jobserver-auth=,$(MAKEFLAGS)),)
+ifeq ($(call HAS_COMMAND,nproc),1)
+CORE_COUNT ?= $(shell nproc)
+else
+CORE_COUNT ?= $(shell sysctl -n hw.ncpu)
+endif
+MAKEFLAGS += --jobs=$(CORE_COUNT)
+endif
 
 PROCURSUS := 1
 
