@@ -68,7 +68,7 @@ ifeq ($(wildcard $(BUILD_WORK)/../../native/llvm/.build_complete),)
 		-DCMAKE_OSX_SYSROOT="$(MACOSX_SYSROOT)" \
 		-DSWIFT_INCLUDE_TESTS=OFF \
 		-DSWIFT_BUILD_RUNTIME_WITH_HOST_COMPILER=ON \
-		-DLLVM_TARGETS_TO_BUILD="X86;AArch64" \
+		-DLLVM_TARGETS_TO_BUILD="AArch64" \
 		-DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" \
 		-DLLVM_ENABLE_RUNTIMES="libc;libcxxabi;libcxx;compiler-rt" \
 		-DLLVM_EXTERNAL_PROJECTS="cmark;swift" \
@@ -128,7 +128,7 @@ ifeq ($(wildcard $(BUILD_WORK)/llvm/build/.build_complete),)
 		-DLLVM_VERSION_SUFFIX="" \
 		-DLLVM_DEFAULT_TARGET_TRIPLE=$(LLVM_TARGET) \
 		-DLLVM_TARGET_TRIPLE_ENV="LLVM_TARGET_TRIPLE" \
-		-DLLVM_TARGETS_TO_BUILD="all" \
+		-DLLVM_TARGETS_TO_BUILD="AArch64" \
 		-DLLVM_ENABLE_PROJECTS="bolt;clang;flang;lldb;clang-tools-extra;lld;polly;pstl;mlir;libclc;openmp" \
 		-DLLVM_ENABLE_RUNTIMES="libc;libcxxabi;libcxx;compiler-rt" \
 		-DLLVM_EXTERNAL_PROJECTS="cmark;swift" \
