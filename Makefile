@@ -426,7 +426,7 @@ endif
 CC              != xcrun --find cc
 CXX             != xcrun --find c++
 CPP             := $(CC) -E
-PATH            := /opt/procursus/bin:/opt/procursus/libexec/gnubin:/usr/bin:$(PATH)
+PATH            := /opt/procursus/bin:/opt/procursus/lib/llvm-16/bin:/opt/procursus/libexec/gnubin:/usr/bin:$(PATH)
 
 CFLAGS_FOR_BUILD   := -arch $(shell uname -m) -mmacosx-version-min=$(shell sw_vers -productVersion) -isysroot $(MACOSX_SYSROOT)
 CPPFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
@@ -469,9 +469,9 @@ ASFLAGS_FOR_BUILD  := $(CFLAGS_FOR_BUILD)
 LDFLAGS_FOR_BUILD  := $(CFLAGS_FOR_BUILD)
 
 endif # ifeq ($(shell sw_vers -productName),macOS)
-AR              != command -v ar
+AR              != /opt/procursus/lib/llvm-16/bin/llvm-ar
 LD              != command -v ld
-RANLIB          != command -v ranlib
+RANLIB          := /opt/procursus/lib/llvm-16/bin/llvm-ar
 STRINGS         != command -v strings
 STRIP           != command -v strip
 NM              != command -v nm
