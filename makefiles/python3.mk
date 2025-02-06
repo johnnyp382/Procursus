@@ -3,8 +3,8 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS      += python3
-PYTHON3_MAJOR_V  := 3.9
-PYTHON3_VERSION  := $(PYTHON3_MAJOR_V).9
+PYTHON3_MAJOR_V  := 3.13
+PYTHON3_VERSION  := $(PYTHON3_MAJOR_V).13
 DEB_PYTHON3_V    ?= $(PYTHON3_VERSION)-1
 
 ifeq ($(shell [ "$(CFVER_WHOLE)" -lt 1900 ] && echo 1),1)
