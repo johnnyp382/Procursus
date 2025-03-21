@@ -139,10 +139,10 @@ MEMO_ARCH             := arm64
 PLATFORM              := iphoneos
 DEB_ARCH              := iphoneos-arm64
 GNU_HOST_TRIPLE       := aarch64-apple-darwin
-PLATFORM_VERSION_MIN  := -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET)
+PLATFORM_VERSION_MIN  := -miphoneos-version-min=16.0
 RUST_TARGET           := aarch64-apple-ios
 GOLANG_OS             := ios
-LLVM_TARGET           := arm64-apple-ios$(IPHONEOS_DEPLOYMENT_TARGET)
+LLVM_TARGET           := arm64-apple-ios16.0
 MEMO_PREFIX           ?= /var/jb
 MEMO_SUB_PREFIX       ?= /usr
 MEMO_ALT_PREFIX       ?=
@@ -150,7 +150,7 @@ MEMO_LAUNCHCTL_PREFIX ?= $(MEMO_PREFIX)
 GNU_PREFIX            :=
 ON_DEVICE_SDK_PATH    := $(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/share/SDKs/iPhoneOS.sdk
 BARE_PLATFORM         := iPhoneOS
-MEMO_DEPLOYMENT       := IPHONEOS_DEPLOYMENT_TARGET=$(IPHONEOS_DEPLOYMENT_TARGET)
+MEMO_DEPLOYMENT       := IPHONEOS_DEPLOYMENT_TARGET=16.1.2
 
 else ifeq ($(MEMO_TARGET),iphoneos-arm64e-rootless)
 MEMO_ARCH             := arm64e
@@ -426,7 +426,7 @@ endif
 CC              != xcrun --find cc
 CXX             != xcrun --find c++
 CPP             := $(CC) -E
-PATH            := /opt/procursus/bin:/opt/procursus/lib/llvm-16/bin:/opt/procursus/libexec/gnubin:/usr/bin:$(PATH)
+PATH            := /opt/procursus/bin:/opt/procursus/libexec/gnubin:/usr/bin:$(PATH)
 
 CFLAGS_FOR_BUILD   := -arch $(shell uname -m) -mmacosx-version-min=$(shell sw_vers -productVersion) -isysroot $(MACOSX_SYSROOT)
 CPPFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
@@ -445,7 +445,7 @@ CXX             != command -v c++
 CPP             := $(CC) -E
 PATH            := /usr/bin:$(PATH)
 
-CFLAGS_FOR_BUILD   := -arch $(shell arch) -miphoneos-version-min=$(shell sw_vers -productVersion)
+CFLAGS_FOR_BUILD   := -arch $(shell arch) -miphoneos-version-min=16.0
 CPPFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
 CXXFLAGS_FOR_BUILD := $(CFLAGS_FOR_BUILD)
 ASFLAGS_FOR_BUILD  := $(CFLAGS_FOR_BUILD)
