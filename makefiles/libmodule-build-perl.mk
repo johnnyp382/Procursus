@@ -3,7 +3,7 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS                  += libmodule-build-perl
-LIBMODULE-BUILD-PERL_VERSION := 0.42_35
+LIBMODULE-BUILD-PERL_VERSION := 0.4234
 DEB_LIBMODULE-BUILD-PERL_V   ?= $(LIBMODULE-BUILD-PERL_VERSION)
 
 libmodule-build-perl-setup: setup
