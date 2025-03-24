@@ -12,7 +12,7 @@ DEB_PERL_V   ?= $(PERL_VERSION)
 export PERL_MAJOR
 
 perl-setup: setup
-	$(call DOWNLOAD_FILES,$(BUILD_SOURCE), https://www.cpan.org/src/5.0/perl-$(PERL_VERSION).tar.gz \
+	$(call DOWNLOAD_FILES,$(BUILD_SOURCE) https://www.cpan.org/src/5.0/perl-$(PERL_VERSION).tar.gz, \
 		https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_V)/perl-cross-$(PERL_CROSS_V).tar.gz)
 	rm -rf $(BUILD_WORK)/perl
 	$(call EXTRACT_TAR,perl-$(PERL_VERSION).tar.gz,perl-$(PERL_VERSION),perl)
@@ -27,13 +27,12 @@ perl-setup: setup
 	sed -i '/-Wl,-E/ s/^/#/' $(BUILD_WORK)/perl/cnf/configure_tool.sh
 	sed -i '/-Wl,-E/ s/^/#/' $(BUILD_WORK)/perl/Makefile
 	sed -i 's/$$(CC) $$(LDDLFLAGS)/$$(CC) $$(LDDLFLAGS) -compatibility_version $(PERL_API_V) -current_version $(PERL_VERSION) -install_name $$(archlib)\/CORE\/$$@/g' $(BUILD_WORK)/perl/Makefile
-	sed -i 's/| $$Is{Android}/| $$Is{Darwin}/g' $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Darwin.pm $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MY.pm
-	sed -i 's/$$Is{Android} )/$$Is{Darwin} )/g' $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Darwin.pm $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MY.pm
-	sed -i '/$$Is{Solaris} =/a \ \ \ \ $$Is{Darwin}  = $$^O eq '\''darwin'\'';' $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Darwin.pm $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MY.pm
+	sed -i 's/| $$Is{Android}/| $$Is{Darwin}/g' $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
+	sed -i 's/$$Is{Android} )/$$Is{Darwin} )/g' $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
+	sed -i '/$$Is{Solaris} =/a \ \ \ \ $$Is{Darwin}  = $$^O eq '\''darwin'\'';' $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
 	sed -i "s/&& $$^O ne 'darwin' //" $(BUILD_WORK)/perl/ext/Errno/Errno_pm.PL
 	sed -i "s/$$^O eq 'linux'/\$$Config{gccversion} ne ''/" $(BUILD_WORK)/perl/ext/Errno/Errno_pm.PL
 	sed -i 's/--sysroot=$$sysroot/-isysroot $$sysroot -arch $(MEMO_ARCH) $(PLATFORM_VERSION_MIN)/' $(BUILD_WORK)/perl/cnf/configure_tool.sh
-	sed -i 's|#include "poll.h"|#include "$(TARGET_SYSROOT)/usr/include/poll.h"|g' $(BUILD_WORK)/perl/dist/IO/IO.xs
 	touch $(BUILD_WORK)/perl/cnf/hints/darwin
 	echo -e "# Linux syscalls\n\
 	d_voidsig='undef'\n\
@@ -42,7 +41,7 @@ perl-setup: setup
 	d_clock_getres='define'\n\
 	d_clock_nanosleep='undef'\n\
 	d_clock='define'\n\
-	byteorder='1234'\n\
+	byteorder='12345678'\n\
 	libperl='libperl.dylib'" > $(BUILD_WORK)/perl/cnf/hints/darwin
 
 ifneq ($(wildcard $(BUILD_WORK)/perl/.build_complete),)
@@ -58,10 +57,16 @@ perl: perl-setup
 	LDFLAGS='$(patsubst -flto=thin,,$(LDFLAGS))' ./configure \
 		--build=$$($(BUILD_MISC)/config.guess) \
 		--target=$(GNU_HOST_TRIPLE) \
-		--mode=target \
 		--sysroot=$(TARGET_SYSROOT) \
 		--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
-		-Dosname='ios' -Dosvers='16.1' -Dstartperl='#!/var/jb/usr/bin/perl' -Dstartsh='#!/var/jb/bin/sh' -Dlibs='-lpthread -ldbm -ldl -lm -lutil -lc' -Daphostname='/var/jb/usr/bin/hostname' -Dfull_sed='/var/jb/usr/bin/sed' -Dgroupcat='cat /var/jb/etc/group' -Dhostcat='cat /var/jb/etc/hosts' -Dcppsymbols='_FORTIFY_SOURCE=2 _LP64=1 __BYTE_ORDER__=1234 __GNUC_MINOR__=1 __GNUC__=14 __LITTLE_ENDIAN__=1 __LP64__=1 __MACH__=1 __PIC__=2 __STDC__=1 __aarch64__=1 __pic__=2' \
+		-Dsh='/var/jb/bin/sh' \
+	 	-Dldlibpthname='LD_LIBRARY_PATH' \
+		-Dlibpth='/var/jb/System/usr/lib /var/jb/lib /var/jb/usr/share/SDKs/iPhoneOS.sdk/usr/lib /var/jb/usr/lib /var/jb/usr/lib/llvm-16/lib/clang-16/lib/darwin /var/jb/usr/lib/llvm-16/lib /var/mobile/Build/build_base/iphoneos-arm64-rootless/2000/var/jb/usr/lib' \
+		-Dlibsdirs='/var/jb/System/usr/lib /var/jb/lib /var/jb/usr/share/SDKs/iPhoneOS.sdk/usr/lib /var/jb/usr/lib/llvm-16/lib/clang-16/lib/darwin /var/mobile/Build/build_base/iphoneos-arm64-rootless/2000/var/jb/usr/lib' \
+		-Dlibsfiles='libgdbm.6.dylib libdb.dylib libdb_cxx.dylib liblldb.dylib libSystem.dylib libutil.dylib libc++abi.dylib libc++experimental.a libcrypt.dylib libsystem_malloc.dylib libsystem_m.dylib libsystem_pthread.dylib libsystem_c.dylib libcurses.dylib libsystem_kernel.dylib libsystem_platform.dylib libsystem_kernel.dylib libsysdiagnose.dylib libdyld.dylib libdispatch.dylib libsystem_info.dylib libcompiler_rt.dylib' \
+		-Dlibsfound='/var/jb/usr/lib/llvm-16/lib/liblldb.16.0.0.dylib /var/jb/usr/lib/libgdbm.6.dylib /var/jb/usr/lib/libdb-18.dylib /var/mobile/Build/build_base/iphoneos-arm64-rootless/2000/var/jb/usr/lib/libexpat.1.6.12.dylib /var/mobile/Build/build_stage/iphoneos-arm64-rootless/2000/libxcrypt/var/jb/usr/lib/libcrypt.2.dylib /var/jb/usr/lib/system/libsystem_m.dylib /var/jb/usr/lib/libdb.dylib /var/jb/System/usr/lib/libSystem.dylib /var/jb/System/usr/lib/libc++.dylib /var/jb/System/usr/lib/libc++abi.dylib' \
+		-Dlibspath='/var/jb/System/usr/lib /var/jb/System/usr/lib/system /var/jb/lib /var/jb/lib/system /var/jb/usr/share/SDKs/iPhoneOS.sdk/usr/lib /var/jb/usr/lib /var/mobile/Build/build_base/iphoneos-arm64-rootless/2000/var/jb/usr/lib' \
+		-Dlibswanted='cl pthread socket bind inet ndbm gdbm dbm db malloc dl ld sun m crypt sec util c cposix posix ucb bsd BSD' \
 		-Duseshrplib \
 		-Dusevendorprefix \
 		-Dvendorprefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
