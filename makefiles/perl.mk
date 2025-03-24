@@ -60,7 +60,7 @@ perl: perl-setup
 		--target=aarch64-apple-ios16.0 \
 		--sysroot=$(TARGET_SYSROOT) \
 		--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
-		-Dosname='ios' -Dosvers='16.1' -Darchname='ios' -Dstartperl='#!/var/jb/usr/bin/perl' -Dstartsh='#!/var/jb/bin/sh' -Daphostname='/var/jb/usr/bin/hostname' -Dfull_sed='/var/jb/usr/bin/sed' -Dgroupcat='cat /var/jb/etc/group' -Dhostcat='cat /var/jb/etc/hosts' -Dcppsymbols='_FORTIFY_SOURCE=2 _LP64=1 __BYTE_ORDER__=1234 __GNUC_MINOR__=1 __GNUC__=14 __LITTLE_ENDIAN__=1 __LP64__=1 __MACH__=1 __PIC__=2 __STDC__=1 __aarch64__=1 __pic__=2' \
+		-Dosname='ios' -Dosvers='16.1' -Dstartperl='#!/var/jb/usr/bin/perl' -Dstartsh='#!/var/jb/bin/sh' -Daphostname='/var/jb/usr/bin/hostname' -Dfull_sed='/var/jb/usr/bin/sed' -Dgroupcat='cat /var/jb/etc/group' -Dhostcat='cat /var/jb/etc/hosts' -Dcppsymbols='_FORTIFY_SOURCE=2 _LP64=1 __BYTE_ORDER__=1234 __GNUC_MINOR__=1 __GNUC__=14 __LITTLE_ENDIAN__=1 __LP64__=1 __MACH__=1 __PIC__=2 __STDC__=1 __aarch64__=1 __pic__=2' \
 		-Duseshrplib \
 		-Dusevendorprefix \
 		-Dvendorprefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
