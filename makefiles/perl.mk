@@ -56,7 +56,7 @@ perl: perl-setup
 	HOSTLDFLAGS='$(LDFLAGS_FOR_BUILD)' \
 	CFLAGS='-DPERL_DARWIN -DPERL_USE_SAFE_PUTENV -DTIME_HIRES_CLOCKID_T -DLIBIOSEXEC_INTERNAL=1 $(patsubst -flto=thin,,$(CFLAGS))' \
 	LDFLAGS='$(patsubst -flto=thin,,$(LDFLAGS))' ./configure \
-		--build=$$($(BUILD_MISC)/config.guess) \
+		--build=x86_64-apple-darwin \
 		--target=arm64-apple-ios16.0 \
 		--mode=target \
 		--sysroot=$(TARGET_SYSROOT) \
