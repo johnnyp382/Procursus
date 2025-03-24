@@ -57,7 +57,7 @@ perl: perl-setup
 	CFLAGS='-DPERL_DARWIN -DPERL_USE_SAFE_PUTENV -DTIME_HIRES_CLOCKID_T -DLIBIOSEXEC_INTERNAL=1 $(patsubst -flto=thin,,$(CFLAGS))' \
 	LDFLAGS='$(patsubst -flto=thin,,$(LDFLAGS))' ./configure \
 		--build=x86_64-apple-darwin \
-		--target=arm64-apple-ios16.0 \
+		--target=aarch64-apple-darwin \
 		--mode=target \
 		--sysroot=$(TARGET_SYSROOT) \
 		--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
