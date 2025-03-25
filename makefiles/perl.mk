@@ -60,10 +60,9 @@ perl: perl-setup
 		--target=$(GNU_HOST_TRIPLE) \
 		--sysroot=$(TARGET_SYSROOT) \
 		--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
-		-Dsh='/var/jb/bin/sh' \
 	 	-Dldlibpthname='LD_LIBRARY_PATH' \
 		-Dlibpth='/var/jb/System/usr/lib /var/jb/lib /var/jb/usr/share/SDKs/iPhoneOS.sdk/usr/lib /var/jb/usr/lib /var/jb/usr/lib/llvm-16/lib/clang-16/lib/darwin /var/jb/usr/lib/llvm-16/lib /var/mobile/Build/build_base/iphoneos-arm64-rootless/2000/var/jb/usr/lib' \
-		-Dlibsdirs='/var/jb/System/usr/lib /var/jb/lib /var/jb/usr/share/SDKs/iPhoneOS.sdk/usr/lib /var/jb/usr/lib/llvm-16/lib/clang-16/lib/darwin /var/mobile/Build/build_base/iphoneos-arm64-rootless/2000/var/jb/usr/lib' \
+		-Dlibsdirs='/var/jb/System/usr/lib /var/jb/lib /var/jb/usr/share/SDKs/iPhoneOS.sdk/usr/lib /var/jb/usr/lib /var/jb/usr/lib/llvm-16/lib/clang-16/lib/darwin /var/mobile/Build/build_base/iphoneos-arm64-rootless/2000/var/jb/usr/lib' \
 		-Dlibsfiles='libgdbm.6.dylib libdb.dylib libdb_cxx.dylib liblldb.dylib libSystem.dylib libutil.dylib libc++abi.dylib libc++experimental.a libcrypt.dylib libsystem_malloc.dylib libsystem_m.dylib libsystem_pthread.dylib libsystem_c.dylib libcurses.dylib libsystem_kernel.dylib libsystem_platform.dylib libsystem_kernel.dylib libsysdiagnose.dylib libdyld.dylib libdispatch.dylib libsystem_info.dylib libcompiler_rt.dylib' \
 		-Dlibsfound='/var/jb/usr/lib/llvm-16/lib/liblldb.16.0.0.dylib /var/jb/usr/lib/libgdbm.6.dylib /var/jb/usr/lib/libdb-18.dylib /var/mobile/Build/build_base/iphoneos-arm64-rootless/2000/var/jb/usr/lib/libexpat.1.6.12.dylib /var/mobile/Build/build_stage/iphoneos-arm64-rootless/2000/libxcrypt/var/jb/usr/lib/libcrypt.2.dylib /var/jb/usr/lib/system/libsystem_m.dylib /var/jb/usr/lib/libdb.dylib /var/jb/System/usr/lib/libSystem.dylib /var/jb/System/usr/lib/libc++.dylib /var/jb/System/usr/lib/libc++abi.dylib' \
 		-Dlibspath='/var/jb/System/usr/lib /var/jb/System/usr/lib/system /var/jb/lib /var/jb/lib/system /var/jb/usr/share/SDKs/iPhoneOS.sdk/usr/lib /var/jb/usr/lib /var/mobile/Build/build_base/iphoneos-arm64-rootless/2000/var/jb/usr/lib' \
