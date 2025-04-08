@@ -37,8 +37,8 @@ golang: golang-setup
 		GOOS=$(GOLANG_OS) \
 		GOARCH=$(shell echo $(MEMO_TARGET) | cut -f2 -d-) \
 		CC="clang" \
-		CC_FOR_TARGET="cc" \
-		CXX_FOR_TARGET="c++" \
+		CC_FOR_TARGET="cc --target=arm64-apple-ios16.0" \
+		CXX_FOR_TARGET="c++ --target=arm64-apple-ios16.0" \
 		CGO_CFLAGS="-Os" \
 		CGO_CXXFLAGS="-Os" \
 		CGO_FFLAGS="-Os" \
