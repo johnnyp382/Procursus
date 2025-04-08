@@ -5,7 +5,7 @@ endif
 SUBPROJECTS           += golang
 GOLANG_MAJOR_V        := 1.22
 GOLANG_VERSION        := $(GOLANG_MAJOR_V).4
-DEBIAN_GOLANG_VERSION := 1.22~3
+DEBIAN_GOLANG_VERSION := 1.24~2
 DEB_GOLANG_V          ?= $(GOLANG_VERSION)
 
 golang-setup: setup
