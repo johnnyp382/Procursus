@@ -3,8 +3,8 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS           += golang
-GOLANG_MAJOR_V        := 1.22
-GOLANG_VERSION        := $(GOLANG_MAJOR_V).4
+GOLANG_MAJOR_V        := 1.24
+GOLANG_VERSION        := $(GOLANG_MAJOR_V).0
 DEBIAN_GOLANG_VERSION := 1.24~2
 DEB_GOLANG_V          ?= $(GOLANG_VERSION)
 
