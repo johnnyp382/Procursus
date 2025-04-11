@@ -109,10 +109,6 @@ golang-package: golang-stage
 	# golang.mk Make .debs
 	$(call PACK,golang-$(GOLANG_MAJOR_V)-src,DEB_GOLANG_V)
 	$(call PACK,golang-$(GOLANG_MAJOR_V)-go,DEB_GOLANG_V)
-	$(call PACK,golang-$(GOLANG_MAJOR_V),DEB_GOLANG_V)
-	$(call PACK,golang,DEB_GOLANG_V)
-	$(call PACK,golang-go,DEB_GOLANG_V)
-	$(call PACK,golang-src,DEB_GOLANG_V)
 
 	# golang.mk Build cleanup
 	rm -rf $(BUILD_DIST)/golang{,-$(GOLANG_MAJOR_V)}{,-src,-go}
