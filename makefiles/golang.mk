@@ -34,8 +34,8 @@ golang: golang-setup
 	cd $(BUILD_WORK)/golang/src && \
 		CGO_ENABLED=1 \
 		GOROOT_FINAL=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/go-$(GOLANG_MAJOR_V) \
-		GOOS=$(GOLANG_OS) \
-		GOARCH=$(shell echo $(MEMO_TARGET) | cut -f2 -d-) \
+		GOOS=ios \
+		GOARCH=arm64 \
 		CC="clang" \
 		CC_FOR_TARGET="cc --target=arm64-apple-ios16.0" \
 		CXX_FOR_TARGET="c++ --target=arm64-apple-ios16.0" \
@@ -44,7 +44,7 @@ golang: golang-setup
 		CGO_FFLAGS="-Os" \
 		CGO_LDFLAGS="-Os -L$(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib" \
 		./make.bash
-	GOTARGET="$(GOLANG_OS)_$(shell echo $(MEMO_TARGET) | cut -f2 -d-)"; \
+	GOTARGET=ios_arm64 \
 	cd $(BUILD_WORK)/golang/pkg/tool/; \
 	for i in *; do \
 		if [ "$$i" != "$$GOTARGET" ]; then \
