@@ -34,17 +34,17 @@ golang: golang-setup
 	cd $(BUILD_WORK)/golang/src && \
 		CGO_ENABLED=1 \
 		GOROOT_FINAL=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/go-$(GOLANG_MAJOR_V) \
-		GOOS=ios \
-		GOARCH=arm64 \
+		GOOS=$(GOLANG_OS) \
+		GOARCH=$(shell echo $(MEMO_TARGET) | cut -f2 -d-) \
 		CC="clang" \
-		CC_FOR_TARGET="cc --target=arm64-apple-ios16.0" \
-		CXX_FOR_TARGET="c++ --target=arm64-apple-ios16.0" \
+		CC_FOR_TARGET="cc" \
+		CXX_FOR_TARGET="c++" \
 		CGO_CFLAGS="-Os" \
 		CGO_CXXFLAGS="-Os" \
 		CGO_FFLAGS="-Os" \
 		CGO_LDFLAGS="-Os -L$(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib" \
 		./make.bash
-	GOTARGET=ios_arm64 \
+	GOTARGET="$(GOLANG_OS)_$(shell echo $(MEMO_TARGET) | cut -f2 -d-)"; \
 	cd $(BUILD_WORK)/golang/pkg/tool/; \
 	for i in *; do \
 		if [ "$$i" != "$$GOTARGET" ]; then \
@@ -97,12 +97,22 @@ golang-package: golang-stage
 	# golang.mk Prep golang-$(GOLANG_MAJOR_V)-go
 	cp -a $(BUILD_STAGE)/golang/go-v $(BUILD_DIST)/golang-$(GOLANG_MAJOR_V)-go
 
+	# golang.mk Prep golang-go
+	cp -a $(BUILD_STAGE)/golang/go $(BUILD_DIST)/golang-go
+
+	# golang.mk Prep golang-src
+	$(LN_S) go-$(GOLANG_MAJOR_V) $(BUILD_DIST)/golang-src/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/share/go
+
 	# golang.mk Sign
 	$(call SIGN,golang-$(GOLANG_MAJOR_V)-go,general.xml)
 
 	# golang.mk Make .debs
 	$(call PACK,golang-$(GOLANG_MAJOR_V)-src,DEB_GOLANG_V)
 	$(call PACK,golang-$(GOLANG_MAJOR_V)-go,DEB_GOLANG_V)
+	$(call PACK,golang-$(GOLANG_MAJOR_V),DEB_GOLANG_V)
+	$(call PACK,golang,DEB_GOLANG_V)
+	$(call PACK,golang-go,DEB_GOLANG_V)
+	$(call PACK,golang-src,DEB_GOLANG_V)
 
 	# golang.mk Build cleanup
 	rm -rf $(BUILD_DIST)/golang{,-$(GOLANG_MAJOR_V)}{,-src,-go}
