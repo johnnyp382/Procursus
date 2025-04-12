@@ -97,12 +97,6 @@ golang-package: golang-stage
 	# golang.mk Prep golang-$(GOLANG_MAJOR_V)-go
 	cp -a $(BUILD_STAGE)/golang/go-v $(BUILD_DIST)/golang-$(GOLANG_MAJOR_V)-go
 
-	# golang.mk Prep golang-go
-	cp -a $(BUILD_STAGE)/golang/go $(BUILD_DIST)/golang-go
-
-	# golang.mk Prep golang-src
-	$(LN_S) go-$(GOLANG_MAJOR_V) $(BUILD_DIST)/golang-src/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/share/go
-
 	# golang.mk Sign
 	$(call SIGN,golang-$(GOLANG_MAJOR_V)-go,general.xml)
 
