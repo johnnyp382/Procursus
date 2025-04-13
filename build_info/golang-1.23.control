@@ -2,7 +2,7 @@ Package: golang-1.23
 Version: @DEB_GOLANG_V@
 Architecture: all
 Maintainer: @DEB_MAINTAINER@
-Depends: golang-1.23-go (>= @DEB_GOLANG_V@), golang-1.23-src (>= @DEB_GOLANG_V@)
+Depends: golang-1.23-go, golang-1.23-src
 Section: Development
 Priority: optional
 Homepage: https://golang.org
