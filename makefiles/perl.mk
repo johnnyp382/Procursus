@@ -32,7 +32,7 @@ perl-setup: setup
 	sed -i '/$$Is{Solaris} =/a \ \ \ \ $$Is{Darwin}  = $$^O eq '\''darwin'\'';' $(BUILD_WORK)/perl/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
 	sed -i "s/&& $$^O ne 'darwin' //" $(BUILD_WORK)/perl/ext/Errno/Errno_pm.PL
 	sed -i "s/$$^O eq 'linux'/\$$Config{gccversion} ne ''/" $(BUILD_WORK)/perl/ext/Errno/Errno_pm.PL
-	sed -i 's/--sysroot=$$sysroot/-isysroot $$sysroot -arch $(MEMO_ARCH) $(PLATFORM_VERSION_MIN)/' $(BUILD_WORK)/perl/cnf/configure_tool.sh
+	sed -i 's/--sysroot=$$sysroot/-isysroot $$sysroot --target=arm64-apple-ios16.0/' $(BUILD_WORK)/perl/cnf/configure_tool.sh
 	sed -i 's|#include "poll.h"|#include "$(TARGET_SYSROOT)/usr/include/poll.h"|g' $(BUILD_WORK)/perl/dist/IO/IO.xs
 	touch $(BUILD_WORK)/perl/cnf/hints/darwin
 	echo -e "# Linux syscalls\n\
@@ -57,7 +57,7 @@ perl: perl-setup
 	CFLAGS='-DPERL_DARWIN -DPERL_USE_SAFE_PUTENV -DTIME_HIRES_CLOCKID_T -DLIBIOSEXEC_INTERNAL=1 $(patsubst -flto=thin,,$(CFLAGS))' \
 	LDFLAGS='$(patsubst -flto=thin,,$(LDFLAGS))' ./configure \
 		--build=$$($(BUILD_MISC)/config.guess) \
-		--target=$(GNU_HOST_TRIPLE) \
+		--target=arm64-apple-ios16.0 \
 		--sysroot=$(TARGET_SYSROOT) \
 		--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
 	 	-Dldlibpthname='LD_LIBRARY_PATH' \
@@ -67,6 +67,9 @@ perl: perl-setup
 		-Dlibsfound='/var/jb/usr/lib/llvm-16/lib/liblldb.16.0.0.dylib /var/jb/usr/lib/libgdbm.6.dylib /var/jb/usr/lib/libdb-18.dylib /var/mobile/Build/build_base/iphoneos-arm64-rootless/2000/var/jb/usr/lib/libexpat.1.6.12.dylib /var/mobile/Build/build_stage/iphoneos-arm64-rootless/2000/libxcrypt/var/jb/usr/lib/libcrypt.2.dylib /var/jb/usr/lib/system/libsystem_m.dylib /var/jb/usr/lib/libdb.dylib /var/jb/System/usr/lib/libSystem.dylib /var/jb/System/usr/lib/libc++.dylib /var/jb/System/usr/lib/libc++abi.dylib' \
 		-Dlibspath='/var/jb/System/usr/lib /var/jb/System/usr/lib/system /var/jb/lib /var/jb/lib/system /var/jb/usr/share/SDKs/iPhoneOS.sdk/usr/lib /var/jb/usr/lib /var/mobile/Build/build_base/iphoneos-arm64-rootless/2000/var/jb/usr/lib' \
 		-Dlibswanted='cl pthread socket bind inet ndbm gdbm dbm db malloc dl ld sun m crypt sec util c cposix posix ucb bsd BSD' \
+		-Dtargetsh=/var/jb/bin/sh \
+		-Dosname=darwin \
+		-Dosversion=22.1.0 \
 		-Duseshrplib \
 		-Dusevendorprefix \
 		-Dvendorprefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
