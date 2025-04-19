@@ -138,7 +138,7 @@ else ifeq ($(MEMO_TARGET),iphoneos-arm64-rootless)
 MEMO_ARCH             := arm64
 PLATFORM              := iphoneos
 DEB_ARCH              := iphoneos-arm64
-GNU_HOST_TRIPLE       := aarch64-apple-darwin
+GNU_HOST_TRIPLE       := aarch64-apple-darwin22.1.0
 PLATFORM_VERSION_MIN  := -miphoneos-version-min=16.0
 RUST_TARGET           := aarch64-apple-ios
 GOLANG_OS             := ios
@@ -643,7 +643,7 @@ BUILD_CONFIGURE_FLAGS := \
 
 DEFAULT_CONFIGURE_FLAGS := \
 	--build=$$($(BUILD_MISC)/config.guess) \
-	--host=$(GNU_HOST_TRIPLE) \
+	--host=arm64-apple-ios16.0 \
 	--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
 	--localstatedir=$(MEMO_PREFIX)/var \
 	--sysconfdir=$(MEMO_PREFIX)/etc \
