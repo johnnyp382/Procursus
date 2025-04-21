@@ -3,7 +3,7 @@ $(error Use the main Makefile)
 endif
 
 STRAPPROJECTS   += gettext
-GETTEXT_VERSION := 0.22
+GETTEXT_VERSION := 0.24
 DEB_GETTEXT_V   ?= $(GETTEXT_VERSION)
 
 gettext-setup: setup
