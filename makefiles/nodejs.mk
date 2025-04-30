@@ -10,8 +10,8 @@ SUBPROJECTS        += nodejs-lts
 NODEJS_LTS_VERSION := 18.19.1
 DEB_NODEJS_LTS_V   ?= $(NODEJS_LTS_VERSION)
 
-ifeq ($(UNAME),Linux)
-NODEJS_HOST := linux
+ifeq ($(UNAME),Darwin)
+NODEJS_HOST := macos
 endif
 
 ifeq ($(PLATFORM),iphoneos)
