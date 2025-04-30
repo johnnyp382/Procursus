@@ -3,11 +3,11 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS        += nodejs
-NODEJS_VERSION     := 17.0.1
+NODEJS_VERSION     := 21.7.1
 DEB_NODEJS_V       ?= $(NODEJS_VERSION)
 
 SUBPROJECTS        += nodejs-lts
-NODEJS_LTS_VERSION := 16.13.0
+NODEJS_LTS_VERSION := 18.19.1
 DEB_NODEJS_LTS_V   ?= $(NODEJS_LTS_VERSION)
 
 ifeq ($(UNAME),Linux)
