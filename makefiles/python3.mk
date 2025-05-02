@@ -3,7 +3,7 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS      += python3
-PYTHON3_MAJOR_V  := 3.13
+PYTHON3_MAJOR_V  := 3.14
 PYTHON3_VERSION  := $(PYTHON3_MAJOR_V).0
 DEB_PYTHON3_V    ?= $(PYTHON3_VERSION)-1
 
@@ -13,9 +13,9 @@ PYTHON3_CONFIGURE_FLAGS = ac_cv_func_mkfifoat=no \
 endif
 
 python3-setup: setup
-	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://www.python.org/ftp/python/$(PYTHON3_VERSION)/Python-$(PYTHON3_VERSION).tar.xz{$(comma).asc})
-	$(call PGP_VERIFY,Python-$(PYTHON3_VERSION).tar.xz,asc)
-	$(call EXTRACT_TAR,Python-$(PYTHON3_VERSION).tar.xz,Python-$(PYTHON3_VERSION),python3)
+	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://www.python.org/ftp/python/$(PYTHON3_VERSION)/Python-$(PYTHON3_VERSION)a7.tar.xz{$(comma).asc})
+	$(call PGP_VERIFY,Python-$(PYTHON3_VERSION)a7.tar.xz,asc)
+	$(call EXTRACT_TAR,Python-$(PYTHON3_VERSION)a7.tar.xz,Python-$(PYTHON3_VERSION),python3)
 	$(call DO_PATCH,python3,python3,-p1)
 	sed -i -e 's/-vxworks/-darwin/g' -e 's/system=VxWorks/system=Darwin/g' -e '/readelf for/d' -e 's|LIBFFI_INCLUDEDIR=.*|LIBFFI_INCLUDEDIR="$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include"|g' $(BUILD_WORK)/python3/configure.ac
 	sed -i -e "s|self.compiler.library_dirs|['$(TARGET_SYSROOT)/usr/lib'] + ['$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib']|g" -e "s|self.compiler.include_dirs|['$(TARGET_SYSROOT)/usr/include'] + ['$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include']|g" -e "s/HOST_PLATFORM == 'darwin'/HOST_PLATFORM.startswith('darwin')/" $(BUILD_WORK)/python3/setup.py
