@@ -129,11 +129,11 @@ ifeq ($(wildcard $(BUILD_WORK)/llvm/build/.build_complete),)
 		-DLLVM_DEFAULT_TARGET_TRIPLE="arm64-apple-ios16.0" \
 		-DLLVM_TARGET_TRIPLE_ENV="arm64-apple-ios16.0" \
 		-DLLVM_TARGETS_TO_BUILD="AArch64" \
-    -DDARWIN_ios_ARCHS=arm64 \
-    -DCOMPILER_RT_ENABLE_IOS=ON \
-    -DCOMPILER_RT_DEFAULT_TARGET_TRIPLE="arm64-apple-ios16.0" \
-    -DLIBCXXABI_TARGET_TRIPLE="arm64-apple-ios16.0" \
-    -DLIBCXX_TARGET_TRIPLE="arm64-apple-ios16.0"
+		-DDARWIN_ios_ARCHS=arm64 \
+		-DCOMPILER_RT_ENABLE_IOS=ON \
+		-DCOMPILER_RT_DEFAULT_TARGET_TRIPLE="arm64-apple-ios16.0" \
+		-DLIBCXXABI_TARGET_TRIPLE="arm64-apple-ios16.0" \
+		-DLIBCXX_TARGET_TRIPLE="arm64-apple-ios16.0"
 		-DLLVM_ENABLE_PROJECTS="clang;lldb;clang-tools-extra;lld;pstl;mlir;libclc" \
 		-DLLVM_ENABLE_RUNTIMES="libc;libcxxabi;libcxx;compiler-rt" \
 		-DLLVM_EXTERNAL_PROJECTS="cmark;swift" \
